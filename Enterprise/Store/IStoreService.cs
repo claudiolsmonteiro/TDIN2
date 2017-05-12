@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -7,12 +8,14 @@ using System.Text;
 
 namespace Store
 {
+
     [ServiceContract]
     public interface IStoreService
     {
 
+
         [OperationContract]
-        string Test();
+        List<List<String>> GetAllBooks();
 
         [OperationContract]
         int GetStock(string book_title);

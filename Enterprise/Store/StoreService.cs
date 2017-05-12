@@ -9,32 +9,66 @@ using System.Data.SqlClient;
 
 namespace Store
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class StoreService : IStoreService
     {
         public static string connString = ConfigurationManager.ConnectionStrings["StoreDB"].ToString();
-        
-        public string Test()
+
+        public List<List<String>> GetAllBooks()
         {
-            try { return "teste";}
-            catch(Exception ex) { throw new System.ServiceModel.FaultException(ex.Message); }
-            
+            SqlConnection conn = new SqlConnection(connString);
+            List<List<String>> retList = new List<List<string>>();
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select title, quantity,price from Books";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {    //Every new row will create a new dictionary that holds the columns
+                    List<String> book = new List<string>();
+
+                    book.Add(reader["title"].ToString());
+                    book.Add(reader["quantity"].ToString());
+                    book.Add(reader["price"].ToString());
+                    
+                    retList.Add(book);
+                }
+                reader.Close();
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return retList;
         }
+
+
+
 
 
         public int GetStock(string book_title)
         {
             SqlConnection conn = new SqlConnection(connString);
-            int stock;
+
+            int stock=0;
             try
             {
                 conn.Open();
-                string sqlcmd = "Select quantity from Books where title = " + book_title;
+                string sqlcmd = "Select quantity from Books where title = '" + book_title+"'";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
-                stock = Convert.ToInt32(cmd.ExecuteScalar());
+                stock = (int)cmd.ExecuteScalar();
+               
             }
             catch
             {
-                return -1;
+                return stock;
             }
             finally
             {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ServiceModel;
-using StoreGUI.StoreServiceReference;
+using StoreGUI.StoreService;
 
 namespace StoreGUI
 {
@@ -98,11 +98,11 @@ namespace StoreGUI
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            string txt = storeProxy.Test();
+            //int txt = storeProxy.GetStock("Lusiadas");
 
             //int stock = storeProxy.GetStock(txt);
 
-            this.BooksButton.Text = txt;
+            this.BooksButton.Text = storeProxy.GetAllBooks().First()[1];
         }
     }
 }

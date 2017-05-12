@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service References\StoreServiceReference\Reference.cs">
+    <Compile Include="Service References\StoreService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -80,13 +80,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\StoreServiceReference\item.xsd">
+    <None Include="Service References\StoreService\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\StoreServiceReference\item1.xsd">
+    <None Include="Service References\StoreService\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\StoreServiceReference\StoreService.wsdl" />
+    <None Include="Service References\StoreService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StoreService\StoreService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -95,19 +98,19 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\StoreServiceReference\" />
+    <WCFMetadataStorage Include="Service References\StoreService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\StoreServiceReference\item.disco" />
+    <None Include="Service References\StoreService\item.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\StoreServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\StoreService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\StoreServiceReference\configuration.svcinfo" />
+    <None Include="Service References\StoreService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\StoreServiceReference\Reference.svcmap">
+    <None Include="Service References\StoreService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
