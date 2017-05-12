@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Store
+namespace StoreGUI
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Store
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new HostForm());
+            Application.Run(new StoreForm());
         }
     }
 }
