@@ -98,6 +98,15 @@
     <None Include="Service References\StoreService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\StoreService\StoreGUI.StoreService.book.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\StoreService\StoreGUI.StoreService.books.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\StoreService\StoreGUI.StoreService.orders.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\StoreService\StoreService.wsdl" />
   </ItemGroup>
   <ItemGroup>

@@ -9,35 +9,237 @@
 //------------------------------------------------------------------------------
 
 namespace StoreGUI.StoreService {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.CollectionDataContractAttribute(Name="books", Namespace="", ItemName="book")]
+    [System.SerializableAttribute()]
+    public class books : System.Collections.Generic.List<StoreGUI.StoreService.book> {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="book", Namespace="")]
+    [System.SerializableAttribute()]
+    public partial class book : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string titleField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string priceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string quantityField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string title {
+            get {
+                return this.titleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.titleField, value) != true)) {
+                    this.titleField = value;
+                    this.RaisePropertyChanged("title");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+        public string price {
+            get {
+                return this.priceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.priceField, value) != true)) {
+                    this.priceField = value;
+                    this.RaisePropertyChanged("price");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        public string quantity {
+            get {
+                return this.quantityField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.quantityField, value) != true)) {
+                    this.quantityField = value;
+                    this.RaisePropertyChanged("quantity");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.CollectionDataContractAttribute(Name="orders", Namespace="", ItemName="order")]
+    [System.SerializableAttribute()]
+    public class orders : System.Collections.Generic.List<StoreGUI.StoreService.order> {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="order", Namespace="")]
+    [System.SerializableAttribute()]
+    public partial class order : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string guidField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string client_nameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string book_titleField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string quantityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string stateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string guid {
+            get {
+                return this.guidField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.guidField, value) != true)) {
+                    this.guidField = value;
+                    this.RaisePropertyChanged("guid");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+        public string client_name {
+            get {
+                return this.client_nameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.client_nameField, value) != true)) {
+                    this.client_nameField = value;
+                    this.RaisePropertyChanged("client_name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        public string book_title {
+            get {
+                return this.book_titleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.book_titleField, value) != true)) {
+                    this.book_titleField = value;
+                    this.RaisePropertyChanged("book_title");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+        public string quantity {
+            get {
+                return this.quantityField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.quantityField, value) != true)) {
+                    this.quantityField = value;
+                    this.RaisePropertyChanged("quantity");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+        public string state {
+            get {
+                return this.stateField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.stateField, value) != true)) {
+                    this.stateField = value;
+                    this.RaisePropertyChanged("state");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StoreService.IStoreService")]
     public interface IStoreService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllBooks", ReplyAction="http://tempuri.org/IStoreService/GetAllBooksResponse")]
-        string[][] GetAllBooks();
+        StoreGUI.StoreService.books GetAllBooks();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllBooks", ReplyAction="http://tempuri.org/IStoreService/GetAllBooksResponse")]
-        System.Threading.Tasks.Task<string[][]> GetAllBooksAsync();
+        System.Threading.Tasks.Task<StoreGUI.StoreService.books> GetAllBooksAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBook", ReplyAction="http://tempuri.org/IStoreService/GetBookResponse")]
-        string[] GetBook(string title);
+        StoreGUI.StoreService.book GetBook(string title);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBook", ReplyAction="http://tempuri.org/IStoreService/GetBookResponse")]
-        System.Threading.Tasks.Task<string[]> GetBookAsync(string title);
+        System.Threading.Tasks.Task<StoreGUI.StoreService.book> GetBookAsync(string title);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllOrders", ReplyAction="http://tempuri.org/IStoreService/GetAllOrdersResponse")]
-        string[][] GetAllOrders();
+        StoreGUI.StoreService.orders GetAllOrders();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllOrders", ReplyAction="http://tempuri.org/IStoreService/GetAllOrdersResponse")]
-        System.Threading.Tasks.Task<string[][]> GetAllOrdersAsync();
+        System.Threading.Tasks.Task<StoreGUI.StoreService.orders> GetAllOrdersAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetOrders", ReplyAction="http://tempuri.org/IStoreService/GetOrdersResponse")]
-        string[][] GetOrders(string client);
+        StoreGUI.StoreService.orders GetOrders(string client);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetOrders", ReplyAction="http://tempuri.org/IStoreService/GetOrdersResponse")]
-        System.Threading.Tasks.Task<string[][]> GetOrdersAsync(string client);
+        System.Threading.Tasks.Task<StoreGUI.StoreService.orders> GetOrdersAsync(string client);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetStock", ReplyAction="http://tempuri.org/IStoreService/GetStockResponse")]
         int GetStock(string book_title);
@@ -91,35 +293,35 @@ namespace StoreGUI.StoreService {
                 base(binding, remoteAddress) {
         }
         
-        public string[][] GetAllBooks() {
+        public StoreGUI.StoreService.books GetAllBooks() {
             return base.Channel.GetAllBooks();
         }
         
-        public System.Threading.Tasks.Task<string[][]> GetAllBooksAsync() {
+        public System.Threading.Tasks.Task<StoreGUI.StoreService.books> GetAllBooksAsync() {
             return base.Channel.GetAllBooksAsync();
         }
         
-        public string[] GetBook(string title) {
+        public StoreGUI.StoreService.book GetBook(string title) {
             return base.Channel.GetBook(title);
         }
         
-        public System.Threading.Tasks.Task<string[]> GetBookAsync(string title) {
+        public System.Threading.Tasks.Task<StoreGUI.StoreService.book> GetBookAsync(string title) {
             return base.Channel.GetBookAsync(title);
         }
         
-        public string[][] GetAllOrders() {
+        public StoreGUI.StoreService.orders GetAllOrders() {
             return base.Channel.GetAllOrders();
         }
         
-        public System.Threading.Tasks.Task<string[][]> GetAllOrdersAsync() {
+        public System.Threading.Tasks.Task<StoreGUI.StoreService.orders> GetAllOrdersAsync() {
             return base.Channel.GetAllOrdersAsync();
         }
         
-        public string[][] GetOrders(string client) {
+        public StoreGUI.StoreService.orders GetOrders(string client) {
             return base.Channel.GetOrders(client);
         }
         
-        public System.Threading.Tasks.Task<string[][]> GetOrdersAsync(string client) {
+        public System.Threading.Tasks.Task<StoreGUI.StoreService.orders> GetOrdersAsync(string client) {
             return base.Channel.GetOrdersAsync(client);
         }
         

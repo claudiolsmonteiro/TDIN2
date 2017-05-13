@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -56,10 +57,10 @@ namespace StoreGUI
             this.listView1.Columns.Add(price);
             this.listView1.Columns.Add(stock);
 
-            String[][] books = storeProxy.GetAllBooks();
-            for(int i = 0; i < books.Length; i++)
+            storeProxy.GetAllBooks();
+            foreach(book b in storeProxy.GetAllBooks())
             {
-                string[] row = { books[i][0], books[i][2]+" €", books[i][1] };
+                string[] row = { b.title, b.price+" €", b.quantity };
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
@@ -84,7 +85,11 @@ namespace StoreGUI
             this.listView1.Columns.Add(price);
             this.listView1.Columns.Add(stock);
 
-            string[] book = storeProxy.GetBook(book_title);
+            string[] book =
+            {
+                storeProxy.GetBook(book_title).title, storeProxy.GetBook(book_title).price,
+                storeProxy.GetBook(book_title).quantity
+            };
             var listViewItem = new ListViewItem(book);
             listView1.Items.Add(listViewItem);
         }
@@ -118,13 +123,14 @@ namespace StoreGUI
             this.listView1.Columns.Add(qt);
             this.listView1.Columns.Add(status);
 
-            String[][] orders = storeProxy.GetAllOrders();
-            for (int i = 0; i < orders.Length; i++)
+            foreach (order o in storeProxy.GetAllOrders())
             {
-                string[] row = { orders[i][0], orders[i][1], orders[i][2], orders[i][3], orders[i][4] };
+                string[] row = { o.guid, o.client_name, o.book_title, o.quantity, o.state };
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
+
+
         }
 
         private void OrderView(string client_name)
@@ -156,14 +162,13 @@ namespace StoreGUI
             this.listView1.Columns.Add(qt);
             this.listView1.Columns.Add(status);
             
-            String[][] orders = storeProxy.GetOrders(client_name);
-            for (int i = 0; i < orders.Length; i++)
+            foreach (order o in storeProxy.GetOrders(client_name))
             {
-                string[] row = { orders[i][0], orders[i][1], orders[i][2], orders[i][3], orders[i][4] };
+                string[] row = { o.guid, o.client_name, o.book_title, o.quantity, o.state };
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
-            
+
         }
 
         private void BooksButton_Click(object sender, EventArgs e)

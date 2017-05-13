@@ -14,10 +14,10 @@ namespace Store
     {
         public static string connString = ConfigurationManager.ConnectionStrings["StoreDB"].ToString();
 
-        public List<List<String>> GetAllBooks()
+        public Books GetAllBooks()
         {
             SqlConnection conn = new SqlConnection(connString);
-            List<List<String>> retList = new List<List<string>>();
+            Books retList = new Books();
             try
             {
                 conn.Open();
@@ -28,12 +28,13 @@ namespace Store
 
                 while (reader.Read())
                 {   
-                    List<String> book = new List<string>();
-
-                    book.Add(reader["title"].ToString());
-                    book.Add(reader["quantity"].ToString());
-                    book.Add(reader["price"].ToString());
-                    
+                    Book book = new Book()
+                    {
+                        title = reader["title"].ToString(),
+                        quantity = reader["quantity"].ToString(),
+                        price = reader["price"].ToString()
+                    };
+                                        
                     retList.Add(book);
                 }
                 reader.Close();
@@ -49,11 +50,11 @@ namespace Store
             return retList;
         }
 
-        public List<String> GetBook(string title)
+        public Book GetBook(string title)
         {
             SqlConnection conn = new SqlConnection(connString);
 
-            List<String> retList = new List<string>();
+            Book retList = new Book();
             try
             {
                 conn.Open();
@@ -63,9 +64,9 @@ namespace Store
 
                 while (reader.Read())
                 {
-                    retList.Add(reader["title"].ToString());
-                    retList.Add(reader["price"].ToString() + " €");
-                    retList.Add(reader["quantity"].ToString());
+                    retList.title = reader["title"].ToString();
+                    retList.price = reader["price"].ToString() + " €";
+                    retList.quantity = reader["quantity"].ToString();
                 }
                 reader.Close();
             }
@@ -80,10 +81,10 @@ namespace Store
             return retList;
         }
 
-        public List<List<String>> GetAllOrders()
+        public Orders GetAllOrders()
         {
             SqlConnection conn = new SqlConnection(connString);
-            List<List<String>> retList = new List<List<string>>();
+            Orders retList = new Orders();
             try
             {
                 conn.Open();
@@ -93,16 +94,17 @@ namespace Store
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
-                {   
-                    List<String> order = new List<string>();
+                {
+                    Order order = new Order()
+                    {
 
-                    order.Add(reader["guid"].ToString());
-                    order.Add(reader["client_name"].ToString());
-                    order.Add(reader["book_title"].ToString());
-                    order.Add(reader["quantity"].ToString());
-                    order.Add(reader["state"].ToString());
-
-                    retList.Add(order);
+                        guid = reader["guid"].ToString(),
+                        client_name = (reader["client_name"].ToString()),
+                        book_title = (reader["book_title"].ToString()),
+                        quantity = (reader["quantity"].ToString()),
+                        state = (reader["state"].ToString()),
+                    };
+                retList.Add(order);
                 }
                 reader.Close();
             }
@@ -117,10 +119,10 @@ namespace Store
             return retList;
         }
 
-        public List<List<String>> GetOrders(string client)
+        public Orders GetOrders(string client)
         {
             SqlConnection conn = new SqlConnection(connString);
-            List<List<String>> retList = new List<List<string>>();
+            Orders retList = new Orders();
             try
             {
                 conn.Open();
@@ -131,13 +133,15 @@ namespace Store
 
                 while (reader.Read())
                 {
-                    List<String> order = new List<string>();
+                    Order order = new Order()
+                    {
 
-                    order.Add(reader["guid"].ToString());
-                    order.Add(reader["client_name"].ToString());
-                    order.Add(reader["book_title"].ToString());
-                    order.Add(reader["quantity"].ToString());
-                    order.Add(reader["state"].ToString());
+                        guid = reader["guid"].ToString(),
+                        client_name = (reader["client_name"].ToString()),
+                        book_title = (reader["book_title"].ToString()),
+                        quantity = (reader["quantity"].ToString()),
+                        state = (reader["state"].ToString()),
+                    };
 
                     retList.Add(order);
                 }
@@ -185,7 +189,7 @@ namespace Store
             {
                 conn.Open();
                 string sqlcmd = "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state, guid)" +
-                    " VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st, @id)";
+                    " VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st, NEWID())";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
                 cmd.Parameters.AddWithValue("@bookTit", book_title);
                 cmd.Parameters.AddWithValue("@qt", quantity);
@@ -193,11 +197,11 @@ namespace Store
                 cmd.Parameters.AddWithValue("@clAddr", client_addr);
                 cmd.Parameters.AddWithValue("@clEmail", client_email);
                 cmd.Parameters.AddWithValue("@st", "waiting expedition");
-
+/*
                 string guidstring = book_title + client_name + quantity;
                 i = new Guid(guidstring);
                 cmd.Parameters.AddWithValue("@id", i);
-
+                */
                 cmd.ExecuteNonQuery();
 
                 //TODO
