@@ -81,7 +81,9 @@
   </xs:element>
   <xs:element name="MakeaSellResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MakeaSellResult" type="xs:int" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateStoreOrder">
@@ -113,7 +115,9 @@
   </xs:element>
   <xs:element name="ConfirmSellResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConfirmSellResult" type="xs:int" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

@@ -64,8 +64,8 @@ namespace Store
                 while (reader.Read())
                 {
                     retList.Add(reader["title"].ToString());
+                    retList.Add(reader["price"].ToString() + " €");
                     retList.Add(reader["quantity"].ToString());
-                    retList.Add(reader["price"].ToString());
                 }
                 reader.Close();
             }
@@ -214,14 +214,14 @@ namespace Store
             return i;
         }
 
-        public void ConfirmSell(string client_name, string book_title, int quantity)
+        public int ConfirmSell(string client_name, string book_title, int quantity)
         {
             SqlConnection conn = new SqlConnection(connString);
             int rows;
             try
             {
                 conn.Open();
-                string sqlcmd = "Update Books set quantity=quantity-"+quantity+" where title="+book_title;
+                string sqlcmd = "Update Books set quantity=quantity-"+quantity+" where title='"+book_title+"'";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
                 rows = cmd.ExecuteNonQuery();
 
@@ -234,15 +234,19 @@ namespace Store
             {
                 conn.Close();
             }
+            return 1;
         }
 
-        public void MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity)
+        public int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity)
         {
             int stock = GetStock(book_title);
             if (stock < quantity)
+            {
                 CreateStoreOrder(client_name, client_email, client_addr, book_title, quantity);
+                return 2;
+            }
             else
-                ConfirmSell(client_name, book_title, quantity);
+               return ConfirmSell(client_name, book_title, quantity);
         }
         
     }

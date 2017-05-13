@@ -46,10 +46,10 @@ namespace StoreGUI.StoreService {
         System.Threading.Tasks.Task<int> GetStockAsync(string book_title);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/MakeaSell", ReplyAction="http://tempuri.org/IStoreService/MakeaSellResponse")]
-        void MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/MakeaSell", ReplyAction="http://tempuri.org/IStoreService/MakeaSellResponse")]
-        System.Threading.Tasks.Task MakeaSellAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        System.Threading.Tasks.Task<int> MakeaSellAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/CreateStoreOrder", ReplyAction="http://tempuri.org/IStoreService/CreateStoreOrderResponse")]
         System.Guid CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
@@ -58,10 +58,10 @@ namespace StoreGUI.StoreService {
         System.Threading.Tasks.Task<System.Guid> CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ConfirmSell", ReplyAction="http://tempuri.org/IStoreService/ConfirmSellResponse")]
-        void ConfirmSell(string client_name, string book_title, int quantity);
+        int ConfirmSell(string client_name, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ConfirmSell", ReplyAction="http://tempuri.org/IStoreService/ConfirmSellResponse")]
-        System.Threading.Tasks.Task ConfirmSellAsync(string client_name, string book_title, int quantity);
+        System.Threading.Tasks.Task<int> ConfirmSellAsync(string client_name, string book_title, int quantity);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -131,11 +131,11 @@ namespace StoreGUI.StoreService {
             return base.Channel.GetStockAsync(book_title);
         }
         
-        public void MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity) {
-            base.Channel.MakeaSell(client_name, client_email, client_addr, book_title, quantity);
+        public int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity) {
+            return base.Channel.MakeaSell(client_name, client_email, client_addr, book_title, quantity);
         }
         
-        public System.Threading.Tasks.Task MakeaSellAsync(string client_name, string client_email, string client_addr, string book_title, int quantity) {
+        public System.Threading.Tasks.Task<int> MakeaSellAsync(string client_name, string client_email, string client_addr, string book_title, int quantity) {
             return base.Channel.MakeaSellAsync(client_name, client_email, client_addr, book_title, quantity);
         }
         
@@ -147,11 +147,11 @@ namespace StoreGUI.StoreService {
             return base.Channel.CreateStoreOrderAsync(client_name, client_email, client_addr, book_title, quantity);
         }
         
-        public void ConfirmSell(string client_name, string book_title, int quantity) {
-            base.Channel.ConfirmSell(client_name, book_title, quantity);
+        public int ConfirmSell(string client_name, string book_title, int quantity) {
+            return base.Channel.ConfirmSell(client_name, book_title, quantity);
         }
         
-        public System.Threading.Tasks.Task ConfirmSellAsync(string client_name, string book_title, int quantity) {
+        public System.Threading.Tasks.Task<int> ConfirmSellAsync(string client_name, string book_title, int quantity) {
             return base.Channel.ConfirmSellAsync(client_name, book_title, quantity);
         }
     }

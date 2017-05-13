@@ -29,6 +29,14 @@ namespace StoreGUI
 
         }
 
+        private void refreshList()
+        {
+            if (active)
+                BooksView();
+            else
+                OrdersView();
+        }
+
         private void BooksView()
         {
             this.listView1.Clear();
@@ -172,7 +180,9 @@ namespace StoreGUI
 
         private void SellButton_Click(object sender, EventArgs e)
         {
-
+            SellForm s = new SellForm(storeProxy);
+            s.ShowDialog();
+            refreshList();
         }
         
         private void SearchButton_Click(object sender, EventArgs e)
