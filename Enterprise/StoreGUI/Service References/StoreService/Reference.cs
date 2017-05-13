@@ -21,6 +21,24 @@ namespace StoreGUI.StoreService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllBooks", ReplyAction="http://tempuri.org/IStoreService/GetAllBooksResponse")]
         System.Threading.Tasks.Task<string[][]> GetAllBooksAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBook", ReplyAction="http://tempuri.org/IStoreService/GetBookResponse")]
+        string[] GetBook(string title);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBook", ReplyAction="http://tempuri.org/IStoreService/GetBookResponse")]
+        System.Threading.Tasks.Task<string[]> GetBookAsync(string title);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllOrders", ReplyAction="http://tempuri.org/IStoreService/GetAllOrdersResponse")]
+        string[][] GetAllOrders();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllOrders", ReplyAction="http://tempuri.org/IStoreService/GetAllOrdersResponse")]
+        System.Threading.Tasks.Task<string[][]> GetAllOrdersAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetOrders", ReplyAction="http://tempuri.org/IStoreService/GetOrdersResponse")]
+        string[][] GetOrders(string client);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetOrders", ReplyAction="http://tempuri.org/IStoreService/GetOrdersResponse")]
+        System.Threading.Tasks.Task<string[][]> GetOrdersAsync(string client);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetStock", ReplyAction="http://tempuri.org/IStoreService/GetStockResponse")]
         int GetStock(string book_title);
         
@@ -79,6 +97,30 @@ namespace StoreGUI.StoreService {
         
         public System.Threading.Tasks.Task<string[][]> GetAllBooksAsync() {
             return base.Channel.GetAllBooksAsync();
+        }
+        
+        public string[] GetBook(string title) {
+            return base.Channel.GetBook(title);
+        }
+        
+        public System.Threading.Tasks.Task<string[]> GetBookAsync(string title) {
+            return base.Channel.GetBookAsync(title);
+        }
+        
+        public string[][] GetAllOrders() {
+            return base.Channel.GetAllOrders();
+        }
+        
+        public System.Threading.Tasks.Task<string[][]> GetAllOrdersAsync() {
+            return base.Channel.GetAllOrdersAsync();
+        }
+        
+        public string[][] GetOrders(string client) {
+            return base.Channel.GetOrders(client);
+        }
+        
+        public System.Threading.Tasks.Task<string[][]> GetOrdersAsync(string client) {
+            return base.Channel.GetOrdersAsync(client);
         }
         
         public int GetStock(string book_title) {

@@ -27,7 +27,7 @@ namespace Store
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
-                {    //Every new row will create a new dictionary that holds the columns
+                {   
                     List<String> book = new List<string>();
 
                     book.Add(reader["title"].ToString());
@@ -49,9 +49,110 @@ namespace Store
             return retList;
         }
 
+        public List<String> GetBook(string title)
+        {
+            SqlConnection conn = new SqlConnection(connString);
 
+            List<String> retList = new List<string>();
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select title, price, quantity from Books where title = '" + title + "'";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    retList.Add(reader["title"].ToString());
+                    retList.Add(reader["quantity"].ToString());
+                    retList.Add(reader["price"].ToString());
+                }
+                reader.Close();
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return retList;
+        }
 
+        public List<List<String>> GetAllOrders()
+        {
+            SqlConnection conn = new SqlConnection(connString);
+            List<List<String>> retList = new List<List<string>>();
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select guid, client_name, book_title, quantity, state from Orders";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {   
+                    List<String> order = new List<string>();
+
+                    order.Add(reader["guid"].ToString());
+                    order.Add(reader["client_name"].ToString());
+                    order.Add(reader["book_title"].ToString());
+                    order.Add(reader["quantity"].ToString());
+                    order.Add(reader["state"].ToString());
+
+                    retList.Add(order);
+                }
+                reader.Close();
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return retList;
+        }
+
+        public List<List<String>> GetOrders(string client)
+        {
+            SqlConnection conn = new SqlConnection(connString);
+            List<List<String>> retList = new List<List<string>>();
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select guid, client_name, book_title, quantity, state from Orders where client_name ='" + client + "'";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    List<String> order = new List<string>();
+
+                    order.Add(reader["guid"].ToString());
+                    order.Add(reader["client_name"].ToString());
+                    order.Add(reader["book_title"].ToString());
+                    order.Add(reader["quantity"].ToString());
+                    order.Add(reader["state"].ToString());
+
+                    retList.Add(order);
+                }
+                reader.Close();
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return retList;
+        }
 
         public int GetStock(string book_title)
         {
@@ -64,7 +165,6 @@ namespace Store
                 string sqlcmd = "Select quantity from Books where title = '" + book_title+"'";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
                 stock = (int)cmd.ExecuteScalar();
-               
             }
             catch
             {

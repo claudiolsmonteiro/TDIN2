@@ -18,6 +18,15 @@ namespace Store
         List<List<String>> GetAllBooks();
 
         [OperationContract]
+        List<String> GetBook(string title);
+        
+        [OperationContract]
+        List<List<String>> GetAllOrders();
+
+        [OperationContract]
+        List<List<String>> GetOrders(string client);
+
+        [OperationContract]
         int GetStock(string book_title);
 
         [OperationContract]
