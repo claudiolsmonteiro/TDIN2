@@ -13,6 +13,7 @@ namespace StoreGUI
 {
     public partial class SellForm : Form
     {
+        StoreService.
         StoreServiceClient storeProxy;
 
         public SellForm(StoreServiceClient sp)

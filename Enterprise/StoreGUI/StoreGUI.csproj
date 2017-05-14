@@ -89,13 +89,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\StoreService\item.xsd">
+    <None Include="Service References\StoreService\Store.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\StoreService\item1.xsd">
+    <None Include="Service References\StoreService\Store1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\StoreService\item2.xsd">
+    <None Include="Service References\StoreService\Store2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\StoreService\StoreGUI.StoreService.book.datasource">
@@ -107,7 +107,7 @@
     <None Include="Service References\StoreService\StoreGUI.StoreService.orders.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\StoreService\StoreService.wsdl" />
+    <None Include="Service References\StoreService\StoreService1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -117,9 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\StoreService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\StoreService\item.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\StoreService\configuration91.svcinfo" />
@@ -132,6 +129,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StoreService\Store.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,22 +13,25 @@ using StoreGUI.StoreService;
 
 namespace StoreGUI
 {
-    public partial class StoreForm : Form
+    public partial class StoreForm : Form, IStoreServiceCallback
     {
         StoreServiceClient storeProxy;
         bool active;
         public StoreForm()
         {
-            storeProxy = new StoreServiceClient();
             InitializeComponent();
+            storeProxy = new StoreServiceClient(new InstanceContext(this));
             BooksView();
             active = true;
+            //storeProxy.Open();
         }
 
         private void StoreForm_Load(object sender, EventArgs e)
         {
 
         }
+
+        public void PrintReceipt(string client_name, string book_title, string quantity, string price) { }
 
         private void refreshList()
         {

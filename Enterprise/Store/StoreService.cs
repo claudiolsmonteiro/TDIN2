@@ -1,19 +1,71 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using System.Net;
+using System.Net.Mail;
 
 namespace Store
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    public delegate void ChangeDataDel();
+
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class StoreService : IStoreService
     {
-        public static string connString = ConfigurationManager.ConnectionStrings["StoreDB"].ToString();
+        public static string cName = "", bTitle ="", q= "0", p = "0.0";
 
+        public static string connString = ConfigurationManager.ConnectionStrings["StoreDB"].ToString();
+        public static List<IPrintReceipt> subscribers = new List<IPrintReceipt>();
+        public static ChangeDataDel changeData = null;
+
+        public void Subscribe()
+        {
+            IPrintReceipt callback = OperationContext.Current.GetCallbackChannel<IPrintReceipt>();
+            if (!subscribers.Contains(callback))
+            {
+                subscribers.Add(callback);
+                if (changeData != null)
+                    changeData();
+            }
+        }
+        public string GetName()
+        {
+            return cName;
+        }
+        public string GetBookTitle()
+        {
+            return bTitle;
+        }
+        public string GetQuantity()
+        {
+            return q;
+        }
+        public string GetPrice()
+        {
+            return p;
+        }
+        public void Unsubscribe()
+        {
+            IPrintReceipt callback = OperationContext.Current.GetCallbackChannel<IPrintReceipt>();
+            subscribers.Remove(callback);
+            if (changeData != null)
+                changeData();
+        }
+        public static void Notify()
+        {
+            subscribers.ForEach(delegate (IPrintReceipt callback) {
+                if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                    callback.PrintReceipt(cName,bTitle,q,p);
+                else
+                    subscribers.Remove(callback);
+            });
+        }
         public Books GetAllBooks()
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -180,32 +232,26 @@ namespace Store
             }
             return stock;
         }
-
-        public Guid CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity)
+        public void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity)
         {
             SqlConnection conn = new SqlConnection(connString);
-            Guid i = new Guid("...");
             try
             {
                 conn.Open();
-                string sqlcmd = "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state, guid)" +
-                    " VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st, NEWID())";
+                string sqlcmd = "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state) VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st)";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
-                cmd.Parameters.AddWithValue("@bookTit", book_title);
-                cmd.Parameters.AddWithValue("@qt", quantity);
-                cmd.Parameters.AddWithValue("@clName", client_name);
-                cmd.Parameters.AddWithValue("@clAddr", client_addr);
-                cmd.Parameters.AddWithValue("@clEmail", client_email);
-                cmd.Parameters.AddWithValue("@st", "waiting expedition");
-/*
-                string guidstring = book_title + client_name + quantity;
-                i = new Guid(guidstring);
-                cmd.Parameters.AddWithValue("@id", i);
-                */
-                cmd.ExecuteNonQuery();
+                cmd.Parameters.Add("@bookTit", SqlDbType.VarChar,50).Value= book_title;
+                cmd.Parameters.Add("@qt", SqlDbType.Int).Value = quantity;
+                cmd.Parameters.Add("@clName", SqlDbType.VarChar, 50).Value = client_name;
+                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = client_name;
+                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = client_addr;
+                cmd.Parameters.Add("@st", SqlDbType.VarChar, 50).Value = "waiting expedition";
 
+                cmd.ExecuteNonQuery();
+                
                 //TODO
                 //Send remote call to warehouse
+                SendEmail(client_name, client_email, client_addr, book_title, quantity);
             }
             catch
             {
@@ -215,9 +261,49 @@ namespace Store
             {
                 conn.Close();
             }
-            return i;
         }
 
+        public void SendEmail(string client_name , string client_email , string client_addr , string book_title , int quantity ) 
+        {
+            //string orderprice = GetPrice(book_title, quantity);
+            SmtpClient client = new SmtpClient();
+            client.Port = 25;
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            client.Timeout = 10000;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential("tdinproj2@gmail.com", "tdinproj2");
+            string id = getGuid(client_name, book_title);
+            MailMessage mm = new MailMessage("tdinproj2@gmail.com", client_email, "Order with ID:" + id +" placed", "Hi "+client_name+".\n The order you placed for "+ quantity+ " "+ book_title+" is being worked on.");
+            mm.BodyEncoding = UTF8Encoding.UTF8;
+            mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+            client.Send(mm);
+        }
+
+        string getGuid(string client_name, string book_title)
+        {
+            SqlConnection conn = new SqlConnection(connString);
+
+            string id = "";
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select guid from Orders where title = '" + book_title + "' and client_name= '"+ client_name+"'";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                id = cmd.ExecuteScalar().ToString();
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return id;
+        }
         public int ConfirmSell(string client_name, string book_title, int quantity)
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -225,14 +311,22 @@ namespace Store
             try
             {
                 conn.Open();
-                string sqlcmd = "Update Books set quantity=quantity-"+quantity+" where title='"+book_title+"'";
+                string sqlcmd = "Update Books set quantity=quantity-" + quantity + " where title='" + book_title + "'";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
                 rows = cmd.ExecuteNonQuery();
 
-                if(rows == 1)
+                if (rows == 1)
                 {
-                    //print receipt
+                    cName = client_name;
+                    bTitle = book_title;
+                    q = quantity.ToString();
+                    p = GetPrice(book_title, quantity);
+                    Notify();
                 }
+
+            }
+            catch
+            {
             }
             finally
             {
@@ -241,12 +335,33 @@ namespace Store
             return 1;
         }
 
+        public string GetPrice(string title, int quantity)
+        {
+            double singleprice;
+            SqlConnection conn = new SqlConnection(connString);
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select price from Books where title = '" + title + "'";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                singleprice = Convert.ToDouble(cmd.ExecuteScalar());
+            }
+            catch
+            {
+                return "error";
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return (singleprice*quantity).ToString();
+        }
         public int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity)
         {
             int stock = GetStock(book_title);
             if (stock < quantity)
             {
-                CreateStoreOrder(client_name, client_email, client_addr, book_title, quantity);
+                CreateStoreOrder(client_name, client_email, client_addr, book_title, (quantity+10));
                 return 2;
             }
             else

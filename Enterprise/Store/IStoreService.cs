@@ -9,10 +9,15 @@ using System.Text;
 namespace Store
 {
 
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IPrintReceipt))]
     public interface IStoreService
     {
 
+        [OperationContract]
+        void Subscribe();
+
+        [OperationContract]
+        void Unsubscribe();
 
         [OperationContract]
         Books GetAllBooks();
@@ -33,10 +38,22 @@ namespace Store
         int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity);
 
         [OperationContract]
-        Guid CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
 
         [OperationContract]
         int ConfirmSell(string client_name, string book_title, int quantity);
+
+        [OperationContract]
+        string GetName();
+
+        [OperationContract]
+        string GetBookTitle();
+
+        [OperationContract]
+        string GetQuantity();
+
+        [OperationContract]
+        string GetPrice();
     }
     [CollectionDataContract(Name = "books", Namespace = "")]
     public class Books : List<Book>
@@ -80,4 +97,9 @@ namespace Store
         public string state { get; set; }
     }
 
+    public interface IPrintReceipt
+    {
+        [OperationContract(IsOneWay = true)]
+        void PrintReceipt(string client_name, string book_title, string quantity, string price);
+    }
 }

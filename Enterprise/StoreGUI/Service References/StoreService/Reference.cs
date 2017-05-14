@@ -214,8 +214,20 @@ namespace StoreGUI.StoreService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StoreService.IStoreService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StoreService.IStoreService", CallbackContract=typeof(StoreGUI.StoreService.IStoreServiceCallback))]
     public interface IStoreService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/Subscribe", ReplyAction="http://tempuri.org/IStoreService/SubscribeResponse")]
+        void Subscribe();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/Subscribe", ReplyAction="http://tempuri.org/IStoreService/SubscribeResponse")]
+        System.Threading.Tasks.Task SubscribeAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/Unsubscribe", ReplyAction="http://tempuri.org/IStoreService/UnsubscribeResponse")]
+        void Unsubscribe();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/Unsubscribe", ReplyAction="http://tempuri.org/IStoreService/UnsubscribeResponse")]
+        System.Threading.Tasks.Task UnsubscribeAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetAllBooks", ReplyAction="http://tempuri.org/IStoreService/GetAllBooksResponse")]
         StoreGUI.StoreService.books GetAllBooks();
@@ -264,6 +276,37 @@ namespace StoreGUI.StoreService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ConfirmSell", ReplyAction="http://tempuri.org/IStoreService/ConfirmSellResponse")]
         System.Threading.Tasks.Task<int> ConfirmSellAsync(string client_name, string book_title, int quantity);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetName", ReplyAction="http://tempuri.org/IStoreService/GetNameResponse")]
+        string GetName();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetName", ReplyAction="http://tempuri.org/IStoreService/GetNameResponse")]
+        System.Threading.Tasks.Task<string> GetNameAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBookTitle", ReplyAction="http://tempuri.org/IStoreService/GetBookTitleResponse")]
+        string GetBookTitle();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetBookTitle", ReplyAction="http://tempuri.org/IStoreService/GetBookTitleResponse")]
+        System.Threading.Tasks.Task<string> GetBookTitleAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetQuantity", ReplyAction="http://tempuri.org/IStoreService/GetQuantityResponse")]
+        string GetQuantity();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetQuantity", ReplyAction="http://tempuri.org/IStoreService/GetQuantityResponse")]
+        System.Threading.Tasks.Task<string> GetQuantityAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetPrice", ReplyAction="http://tempuri.org/IStoreService/GetPriceResponse")]
+        string GetPrice();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetPrice", ReplyAction="http://tempuri.org/IStoreService/GetPriceResponse")]
+        System.Threading.Tasks.Task<string> GetPriceAsync();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IStoreServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStoreService/PrintReceipt")]
+        void PrintReceipt(string client_name, string book_title, string quantity, string price);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -272,25 +315,42 @@ namespace StoreGUI.StoreService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class StoreServiceClient : System.ServiceModel.ClientBase<StoreGUI.StoreService.IStoreService>, StoreGUI.StoreService.IStoreService {
+    public partial class StoreServiceClient : System.ServiceModel.DuplexClientBase<StoreGUI.StoreService.IStoreService>, StoreGUI.StoreService.IStoreService {
         
-        public StoreServiceClient() {
+        public StoreServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public StoreServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public StoreServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public StoreServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public StoreServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public StoreServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public StoreServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public StoreServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public StoreServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void Subscribe() {
+            base.Channel.Subscribe();
+        }
+        
+        public System.Threading.Tasks.Task SubscribeAsync() {
+            return base.Channel.SubscribeAsync();
+        }
+        
+        public void Unsubscribe() {
+            base.Channel.Unsubscribe();
+        }
+        
+        public System.Threading.Tasks.Task UnsubscribeAsync() {
+            return base.Channel.UnsubscribeAsync();
         }
         
         public StoreGUI.StoreService.books GetAllBooks() {
@@ -355,6 +415,38 @@ namespace StoreGUI.StoreService {
         
         public System.Threading.Tasks.Task<int> ConfirmSellAsync(string client_name, string book_title, int quantity) {
             return base.Channel.ConfirmSellAsync(client_name, book_title, quantity);
+        }
+        
+        public string GetName() {
+            return base.Channel.GetName();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetNameAsync() {
+            return base.Channel.GetNameAsync();
+        }
+        
+        public string GetBookTitle() {
+            return base.Channel.GetBookTitle();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetBookTitleAsync() {
+            return base.Channel.GetBookTitleAsync();
+        }
+        
+        public string GetQuantity() {
+            return base.Channel.GetQuantity();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetQuantityAsync() {
+            return base.Channel.GetQuantityAsync();
+        }
+        
+        public string GetPrice() {
+            return base.Channel.GetPrice();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetPriceAsync() {
+            return base.Channel.GetPriceAsync();
         }
     }
 }

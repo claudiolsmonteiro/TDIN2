@@ -18,32 +18,18 @@ namespace Store
         {
             InitializeComponent();
             this.label1.Text = "service closed";
+            StoreService.changeData = new ChangeDataDel(OnChange);
         }
-
+        public void OnChange()
+        {
+            //label1.Text = StoreService.subscribers.Count.ToString();
+        }
         private void StoreForm_Load(object sender, EventArgs e)
         {
-            
+            SService = new ServiceHost(typeof(StoreService));
+            this.label1.Text = "Store Service Open";
+            SService.Open();
         }
         
-        private void OpenButton_Click(object sender, EventArgs e)
-        {
-            if(SService == null)
-            {
-                SService = new ServiceHost(typeof(StoreService));
-                SService.Open();
-                this.label1.Text = "Service open";
-            }
-        }
-
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            if (SService != null)
-            {
-                SService.Close();
-                SService = null;
-                this.label1.Text = "Service closed";
-            }
-        }
-
     }
 }

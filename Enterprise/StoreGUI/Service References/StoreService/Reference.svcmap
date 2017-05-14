@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/Store/StoreService/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:9000/Store" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="e0368b53-d664-412e-9916-4aa181f10c2f" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Store/StoreService/?xsd=xsd2" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="0f28d209-3da3-460d-93fc-332052b9cd7d" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Store/StoreService/?disco" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="e842706b-e970-4e64-929f-00de7d7ebf4d" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Store/StoreService/?xsd=xsd0" />
-    <MetadataFile FileName="StoreService.wsdl" MetadataType="Wsdl" ID="6ef81333-ab8c-4ec6-8d24-f70ab0938158" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Store/StoreService/?wsdl" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="9b4cde05-e273-4802-89f5-022520b70edf" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Store/StoreService/?xsd=xsd1" />
+    <MetadataFile FileName="StoreService1.wsdl" MetadataType="Wsdl" ID="51ff142d-8648-43f3-b36a-374641b4ddf1" SourceId="1" SourceUrl="http://localhost:9000/Store?wsdl" />
+    <MetadataFile FileName="Store.xsd" MetadataType="Schema" ID="2e31029e-3658-4c71-b109-3df63aecdd67" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd1" />
+    <MetadataFile FileName="Store1.xsd" MetadataType="Schema" ID="22712090-7ed0-47b9-a15e-fad7b9154150" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd2" />
+    <MetadataFile FileName="Store2.xsd" MetadataType="Schema" ID="44c5bd4f-e3ef-4360-80c4-82cc18002028" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd0" />
+    <MetadataFile FileName="Store.disco" MetadataType="Disco" ID="33c26aab-254f-4008-a6d9-c3db7d11664b" SourceId="1" SourceUrl="http://localhost:9000/Store?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
