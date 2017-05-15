@@ -266,10 +266,10 @@ namespace StoreGUI.StoreService {
         System.Threading.Tasks.Task<int> MakeaSellAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/CreateStoreOrder", ReplyAction="http://tempuri.org/IStoreService/CreateStoreOrderResponse")]
-        System.Guid CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/CreateStoreOrder", ReplyAction="http://tempuri.org/IStoreService/CreateStoreOrderResponse")]
-        System.Threading.Tasks.Task<System.Guid> CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        System.Threading.Tasks.Task CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ConfirmSell", ReplyAction="http://tempuri.org/IStoreService/ConfirmSellResponse")]
         int ConfirmSell(string client_name, string book_title, int quantity);
@@ -300,6 +300,12 @@ namespace StoreGUI.StoreService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetPrice", ReplyAction="http://tempuri.org/IStoreService/GetPriceResponse")]
         System.Threading.Tasks.Task<string> GetPriceAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ReceiveOrder", ReplyAction="http://tempuri.org/IStoreService/ReceiveOrderResponse")]
+        void ReceiveOrder(string[] order);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ReceiveOrder", ReplyAction="http://tempuri.org/IStoreService/ReceiveOrderResponse")]
+        System.Threading.Tasks.Task ReceiveOrderAsync(string[] order);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -307,6 +313,9 @@ namespace StoreGUI.StoreService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStoreService/PrintReceipt")]
         void PrintReceipt(string client_name, string book_title, string quantity, string price);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStoreService/UpdateOrder")]
+        void UpdateOrder(string book_title, string quantity);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -401,11 +410,11 @@ namespace StoreGUI.StoreService {
             return base.Channel.MakeaSellAsync(client_name, client_email, client_addr, book_title, quantity);
         }
         
-        public System.Guid CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity) {
-            return base.Channel.CreateStoreOrder(client_name, client_email, client_addr, book_title, quantity);
+        public void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity) {
+            base.Channel.CreateStoreOrder(client_name, client_email, client_addr, book_title, quantity);
         }
         
-        public System.Threading.Tasks.Task<System.Guid> CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity) {
+        public System.Threading.Tasks.Task CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity) {
             return base.Channel.CreateStoreOrderAsync(client_name, client_email, client_addr, book_title, quantity);
         }
         
@@ -447,6 +456,14 @@ namespace StoreGUI.StoreService {
         
         public System.Threading.Tasks.Task<string> GetPriceAsync() {
             return base.Channel.GetPriceAsync();
+        }
+        
+        public void ReceiveOrder(string[] order) {
+            base.Channel.ReceiveOrder(order);
+        }
+        
+        public System.Threading.Tasks.Task ReceiveOrderAsync(string[] order) {
+            return base.Channel.ReceiveOrderAsync(order);
         }
     }
 }

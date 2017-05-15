@@ -60,6 +60,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\WarehouseService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="StoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +103,9 @@
     <None Include="Service References\StoreService\Store2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\StoreService\Store3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\StoreService\StoreGUI.StoreService.book.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -108,6 +116,13 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\StoreService\StoreService1.wsdl" />
+    <None Include="Service References\WarehouseService\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WarehouseService\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WarehouseService\WarehouseService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -117,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\StoreService\" />
+    <WCFMetadataStorage Include="Service References\WarehouseService\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\StoreService\configuration91.svcinfo" />
@@ -132,6 +148,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\StoreService\Store.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WarehouseService\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WarehouseService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WarehouseService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WarehouseService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

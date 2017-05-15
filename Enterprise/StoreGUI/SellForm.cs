@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using StoreGUI.StoreService;
+using StoreGUI.WarehouseService;
 
 namespace StoreGUI
 {
@@ -15,10 +16,12 @@ namespace StoreGUI
     {
         StoreService.
         StoreServiceClient storeProxy;
+        WarehouseServiceClient warehouseProxy;
 
         public SellForm(StoreServiceClient sp)
         {
             storeProxy = sp;
+            warehouseProxy = new WarehouseServiceClient();
             InitializeComponent();
         }
 
@@ -38,6 +41,7 @@ namespace StoreGUI
                     break;
                 case 2:
                     MessageBox.Show("Insufficient stock for sale. An order was created");
+                    warehouseProxy.AddOrder(this.book_title.Text, System.Convert.ToInt32(this.quantityValue.Value));
                     break;
                 default:
                     break;

@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ServiceModel;
 using StoreGUI.StoreService;
+using StoreGUI.WarehouseService;
 
 namespace StoreGUI
 {
     public partial class StoreForm : Form, IStoreServiceCallback
     {
         StoreServiceClient storeProxy;
+        
         bool active;
         public StoreForm()
         {
@@ -28,10 +30,16 @@ namespace StoreGUI
 
         private void StoreForm_Load(object sender, EventArgs e)
         {
-
+            storeProxy.Subscribe();
         }
 
         public void PrintReceipt(string client_name, string book_title, string quantity, string price) { }
+
+        public void UpdateOrder(string title, string quantity)
+        {
+            MessageBox.Show(quantity + " copies of " + title + " were shipped from the warehouse");
+
+        }
 
         private void refreshList()
         {
@@ -199,6 +207,7 @@ namespace StoreGUI
                 BookView(SearchBox.Text);
             else
                 OrderView(SearchBox.Text);
+            
         }
     }
 }

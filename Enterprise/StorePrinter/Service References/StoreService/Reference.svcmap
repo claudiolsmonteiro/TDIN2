@@ -22,10 +22,11 @@
     <MetadataSource Address="http://localhost:9000/Store" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="Store2.xsd" MetadataType="Schema" ID="dd93e411-a3bc-496f-807c-0c9261631245" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd0" />
+    <MetadataFile FileName="Store1.xsd" MetadataType="Schema" ID="058d3ea4-1e5b-4232-821b-17fae9762548" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd2" />
+    <MetadataFile FileName="Store3.xsd" MetadataType="Schema" ID="f9e677d5-1bdc-45b1-ac28-d0fa07b16595" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd3" />
     <MetadataFile FileName="StoreService.wsdl" MetadataType="Wsdl" ID="3c6b15f1-c7e8-468c-853a-509b893e13c0" SourceId="1" SourceUrl="http://localhost:9000/Store?wsdl" />
     <MetadataFile FileName="Store.xsd" MetadataType="Schema" ID="78539e19-f1ac-43f3-9694-d8782e203469" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd1" />
-    <MetadataFile FileName="Store1.xsd" MetadataType="Schema" ID="058d3ea4-1e5b-4232-821b-17fae9762548" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd2" />
-    <MetadataFile FileName="Store2.xsd" MetadataType="Schema" ID="dd93e411-a3bc-496f-807c-0c9261631245" SourceId="1" SourceUrl="http://localhost:9000/Store?xsd=xsd0" />
     <MetadataFile FileName="Store.disco" MetadataType="Disco" ID="60945ad5-83ed-4299-be6b-2699488f356b" SourceId="1" SourceUrl="http://localhost:9000/Store?disco" />
   </Metadata>
   <Extensions>

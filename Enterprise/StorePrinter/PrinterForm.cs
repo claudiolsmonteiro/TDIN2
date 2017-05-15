@@ -38,6 +38,9 @@ namespace StorePrinter
             label7.Text = quantity;
             label8.Text = price;
         }
+
+        public void UpdateOrder(string title, string quantity) { }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             proxy.Unsubscribe();

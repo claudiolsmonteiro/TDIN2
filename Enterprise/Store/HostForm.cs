@@ -24,7 +24,7 @@ namespace Store
         {
             //label1.Text = StoreService.subscribers.Count.ToString();
         }
-        private void StoreForm_Load(object sender, EventArgs e)
+        private void HostForm_Load(object sender, EventArgs e)
         {
             SService = new ServiceHost(typeof(StoreService));
             this.label1.Text = "Store Service Open";

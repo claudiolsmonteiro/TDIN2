@@ -54,6 +54,9 @@ namespace Store
 
         [OperationContract]
         string GetPrice();
+
+        [OperationContract]
+        void ReceiveOrder(string[] order);
     }
     [CollectionDataContract(Name = "books", Namespace = "")]
     public class Books : List<Book>
@@ -101,5 +104,8 @@ namespace Store
     {
         [OperationContract(IsOneWay = true)]
         void PrintReceipt(string client_name, string book_title, string quantity, string price);
+
+        [OperationContract(IsOneWay = true)]
+        void UpdateOrder(string book_title, string quantity);
     }
 }

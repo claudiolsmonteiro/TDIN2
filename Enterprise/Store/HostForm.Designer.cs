@@ -48,7 +48,7 @@
             this.Controls.Add(this.label1);
             this.Name = "HostForm";
             this.Text = "Store";
-            this.Load += new System.EventHandler(this.StoreForm_Load);
+            this.Load += new System.EventHandler(this.HostForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

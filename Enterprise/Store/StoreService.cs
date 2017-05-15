@@ -18,7 +18,7 @@ namespace Store
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class StoreService : IStoreService
     {
-        public static string cName = "", bTitle ="", q= "0", p = "0.0";
+        public static string cName = "", bTitle ="", q= "0", p = "0.0", bookTitle = "", qty = "0";
 
         public static string connString = ConfigurationManager.ConnectionStrings["StoreDB"].ToString();
         public static List<IPrintReceipt> subscribers = new List<IPrintReceipt>();
@@ -34,22 +34,27 @@ namespace Store
                     changeData();
             }
         }
+
         public string GetName()
         {
             return cName;
         }
+
         public string GetBookTitle()
         {
             return bTitle;
         }
+
         public string GetQuantity()
         {
             return q;
         }
+
         public string GetPrice()
         {
             return p;
         }
+
         public void Unsubscribe()
         {
             IPrintReceipt callback = OperationContext.Current.GetCallbackChannel<IPrintReceipt>();
@@ -57,6 +62,7 @@ namespace Store
             if (changeData != null)
                 changeData();
         }
+
         public static void Notify()
         {
             subscribers.ForEach(delegate (IPrintReceipt callback) {
@@ -66,6 +72,17 @@ namespace Store
                     subscribers.Remove(callback);
             });
         }
+
+        public static void NotifyOrder()
+        {
+            subscribers.ForEach(delegate (IPrintReceipt callback) {
+                if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                    callback.UpdateOrder(bookTitle, qty);
+                else
+                    subscribers.Remove(callback);
+            });
+        }
+
         public Books GetAllBooks()
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -232,6 +249,7 @@ namespace Store
             }
             return stock;
         }
+
         public void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity)
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -304,6 +322,7 @@ namespace Store
             }
             return id;
         }
+
         public int ConfirmSell(string client_name, string book_title, int quantity)
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -356,6 +375,7 @@ namespace Store
             }
             return (singleprice*quantity).ToString();
         }
+
         public int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity)
         {
             int stock = GetStock(book_title);
@@ -368,5 +388,11 @@ namespace Store
                return ConfirmSell(client_name, book_title, quantity);
         }
         
+        public void ReceiveOrder(string[] order)
+        {
+            bookTitle = order[0];
+            qty = order[1];
+            NotifyOrder();
+        }
     }
 }
