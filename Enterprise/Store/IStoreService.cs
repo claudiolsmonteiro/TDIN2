@@ -41,6 +41,9 @@ namespace Store
         void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
 
         [OperationContract]
+        void UpdateStock(string book_title, int quantity);
+
+        [OperationContract]
         int ConfirmSell(string client_name, string book_title, int quantity);
 
         [OperationContract]

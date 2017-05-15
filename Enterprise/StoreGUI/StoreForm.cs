@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.ServiceModel;
 using StoreGUI.StoreService;
 using StoreGUI.WarehouseService;
+using System.Threading;
 
 namespace StoreGUI
 {
@@ -38,7 +39,7 @@ namespace StoreGUI
         public void UpdateOrder(string title, string quantity)
         {
             MessageBox.Show(quantity + " copies of " + title + " were shipped from the warehouse");
-
+            
         }
 
         private void refreshList()
@@ -68,7 +69,6 @@ namespace StoreGUI
             this.listView1.Columns.Add(price);
             this.listView1.Columns.Add(stock);
 
-            storeProxy.GetAllBooks();
             foreach(book b in storeProxy.GetAllBooks())
             {
                 string[] row = { b.title, b.price+" €", b.quantity };
@@ -196,8 +196,7 @@ namespace StoreGUI
 
         private void SellButton_Click(object sender, EventArgs e)
         {
-            SellForm s = new SellForm(storeProxy);
-            s.ShowDialog();
+            new Thread(() => new SellForm(storeProxy).ShowDialog()).Start();
             refreshList();
         }
         

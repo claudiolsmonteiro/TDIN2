@@ -281,6 +281,11 @@ namespace Store
             }
         }
 
+        public void UpdateStock(string book_title, int quantity)
+        {
+
+        }
+
         public void SendEmail(string client_name , string client_email , string client_addr , string book_title , int quantity ) 
         {
             //string orderprice = GetPrice(book_title, quantity);
