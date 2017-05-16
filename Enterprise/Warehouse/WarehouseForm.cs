@@ -145,6 +145,7 @@ namespace Warehouse
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
+            listView1.Items.Clear();
             SqlConnection conn = new SqlConnection(connString);
             try
             {

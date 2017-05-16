@@ -413,7 +413,6 @@ namespace Store
         {
             bookTitle = order[0];
             qty = order[1];
-            UpdateStock(order[0], System.Convert.ToInt32(order[1]));
             NotifyOrder();
         }
     }

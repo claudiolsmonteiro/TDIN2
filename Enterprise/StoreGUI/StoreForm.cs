@@ -18,15 +18,16 @@ namespace StoreGUI
     public partial class StoreForm : Form, IStoreServiceCallback
     {
         StoreServiceClient storeProxy;
-        
-        bool active;
+        private List<KeyValuePair<string, string>> incoming;
+        string active;
         public StoreForm()
         {
             InitializeComponent();
             storeProxy = new StoreServiceClient(new InstanceContext(this));
             
             BooksView();
-            active = true;
+            active = "books";
+            incoming = new List<KeyValuePair<string, string>>();
             //storeProxy.Open();
         }
 
@@ -39,13 +40,16 @@ namespace StoreGUI
 
         public void UpdateOrder(string title, string quantity)
         {
-            MessageBox.Show(quantity + " copies of " + title + " were shipped from the warehouse");
+            incoming.Insert(0,new KeyValuePair<string, string>(title, quantity));
+            MessageBox.Show(quantity + " copies of " + title + " are going to be shipped. Dispatch should occur at "+ System.DateTime.Today.AddDays(2).ToString("d"));
         }
 
         private void refreshList()
         {
-            if (active)
+            if (active.Equals("books"))
                 BooksView();
+            else if(active.Equals("pending"))
+                PendingView();
             else
                 OrdersView();
         }
@@ -185,13 +189,13 @@ namespace StoreGUI
         private void BooksButton_Click(object sender, EventArgs e)
         {
             BooksView();
-            active = true;
+            active = "books";
         }
 
         private void OrdersButton_Click(object sender, EventArgs e)
         {
             OrdersView();
-            active = false;
+            active = "orders";
         }
 
         private void SellButton_Click(object sender, EventArgs e)
@@ -202,11 +206,71 @@ namespace StoreGUI
         
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            if (active)
+            if (active.Equals("books"))
                 BookView(SearchBox.Text);
             else
                 OrderView(SearchBox.Text);
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            active = "pending";
+            PendingView();
+
+            //storeProxy.UpdateStock();
+        }
+
+        private void PendingView()
+        {
+            this.listView1.Clear();
+            System.Windows.Forms.ColumnHeader title = new System.Windows.Forms.ColumnHeader();
+            title.Text = "Title";
+            title.Width = 400;
+            title.TextAlign = HorizontalAlignment.Center;
+            System.Windows.Forms.ColumnHeader quantity = new System.Windows.Forms.ColumnHeader();
+            quantity.Text = "Quantity";
+            quantity.Width = 125;
+            quantity.TextAlign = HorizontalAlignment.Center;
+            this.listView1.Columns.Add(title);
+            this.listView1.Columns.Add(quantity);
+            this.listView1.FullRowSelect = true;
+            foreach (KeyValuePair<string, string> i in incoming)
+            {
+                string[] row = { i.Key, i.Value };
+                var listViewItem = new ListViewItem(row);
+                listView1.Items.Add(listViewItem);
+            }
+        }
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (active.Equals("books"))
+            {
+                
+            }
+            else if (active.Equals("pending"))
+            {
+                DialogResult result = MessageBox.Show("Accept Order", "Book", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    string title="";
+                    int x = 0;
+                    int quantity= 0;
+                    foreach (ListViewItem Item in listView1.SelectedItems)
+                    {
+                        x = Item.Index;
+                        title = listView1.Items[x].SubItems[0].Text;
+                        quantity = System.Convert.ToInt32(listView1.Items[x].SubItems[1].Text);
+                    }
+                    storeProxy.UpdateStock(title,quantity);
+                    incoming.Remove(new KeyValuePair<string, string>(listView1.Items[x].SubItems[0].Text, listView1.Items[x].SubItems[1].Text));
+                }
+                else if (result == DialogResult.No)
+                {
+                    
+                }
+            }
+            refreshList();
         }
     }
 }

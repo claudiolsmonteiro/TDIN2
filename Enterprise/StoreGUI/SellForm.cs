@@ -41,7 +41,7 @@ namespace StoreGUI
                     break;
                 case 2:
                     MessageBox.Show("Insufficient stock for sale. An order was created");
-                    warehouseProxy.AddOrder(this.book_title.Text, System.Convert.ToInt32(this.quantityValue.Value));
+                    warehouseProxy.AddOrder(this.book_title.Text, (System.Convert.ToInt32(this.quantityValue.Value)+10));
                     break;
                 default:
                     break;
