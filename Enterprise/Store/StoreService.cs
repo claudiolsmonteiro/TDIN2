@@ -283,7 +283,23 @@ namespace Store
 
         public void UpdateStock(string book_title, int quantity)
         {
-
+            SqlConnection conn = new SqlConnection(connString);
+            int rows;
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Update Books set quantity=quantity+" + quantity + " where title='" + book_title + "'";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                rows = cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                return;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void SendEmail(string client_name , string client_email , string client_addr , string book_title , int quantity ) 
@@ -397,6 +413,7 @@ namespace Store
         {
             bookTitle = order[0];
             qty = order[1];
+            UpdateStock(order[0], System.Convert.ToInt32(order[1]));
             NotifyOrder();
         }
     }

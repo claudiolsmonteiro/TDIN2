@@ -24,6 +24,7 @@ namespace StoreGUI
         {
             InitializeComponent();
             storeProxy = new StoreServiceClient(new InstanceContext(this));
+            
             BooksView();
             active = true;
             //storeProxy.Open();
@@ -39,7 +40,6 @@ namespace StoreGUI
         public void UpdateOrder(string title, string quantity)
         {
             MessageBox.Show(quantity + " copies of " + title + " were shipped from the warehouse");
-            
         }
 
         private void refreshList()

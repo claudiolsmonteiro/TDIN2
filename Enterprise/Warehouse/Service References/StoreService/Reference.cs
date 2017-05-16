@@ -271,6 +271,12 @@ namespace Warehouse.StoreService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/CreateStoreOrder", ReplyAction="http://tempuri.org/IStoreService/CreateStoreOrderResponse")]
         System.Threading.Tasks.Task CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/UpdateStock", ReplyAction="http://tempuri.org/IStoreService/UpdateStockResponse")]
+        void UpdateStock(string book_title, int quantity);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/UpdateStock", ReplyAction="http://tempuri.org/IStoreService/UpdateStockResponse")]
+        System.Threading.Tasks.Task UpdateStockAsync(string book_title, int quantity);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/ConfirmSell", ReplyAction="http://tempuri.org/IStoreService/ConfirmSellResponse")]
         int ConfirmSell(string client_name, string book_title, int quantity);
         
@@ -416,6 +422,14 @@ namespace Warehouse.StoreService {
         
         public System.Threading.Tasks.Task CreateStoreOrderAsync(string client_name, string client_email, string client_addr, string book_title, int quantity) {
             return base.Channel.CreateStoreOrderAsync(client_name, client_email, client_addr, book_title, quantity);
+        }
+        
+        public void UpdateStock(string book_title, int quantity) {
+            base.Channel.UpdateStock(book_title, quantity);
+        }
+        
+        public System.Threading.Tasks.Task UpdateStockAsync(string book_title, int quantity) {
+            return base.Channel.UpdateStockAsync(book_title, quantity);
         }
         
         public int ConfirmSell(string client_name, string book_title, int quantity) {
