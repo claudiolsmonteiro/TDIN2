@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Warehouse
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
-            ServiceHost host = new ServiceHost(typeof(Warehouse.WarehouseService));
+            var host = new ServiceHost(typeof(WarehouseService));
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new WarehouseForm(host));

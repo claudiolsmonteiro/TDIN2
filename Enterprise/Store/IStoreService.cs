@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
 namespace Store
 {
-
     [ServiceContract(CallbackContract = typeof(IPrintReceipt))]
     public interface IStoreService
     {
-
         [OperationContract]
         void Subscribe();
 
@@ -24,7 +18,7 @@ namespace Store
 
         [OperationContract]
         Book GetBook(string title);
-        
+
         [OperationContract]
         Orders GetAllOrders();
 
@@ -32,7 +26,7 @@ namespace Store
         Orders GetOrders(string client);
 
         [OperationContract]
-        void SatisfyOrders(string book, int quantity);
+        void SatisfyOrders(string book, int quantity, bool first);
 
         [OperationContract]
         void SatisfyOrder(int orderID, string client, string email, string book, int quant, string guid);
@@ -44,7 +38,11 @@ namespace Store
         int MakeaSell(string client_name, string client_email, string client_addr, string book_title, int quantity);
 
         [OperationContract]
-        void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title, int quantity);
+        void CreateStoreOrder(string client_name, string client_email, string client_addr, string book_title,
+            int quantity);
+
+        [OperationContract]
+        void UpdateState(string title, int quantity, string date);
 
         [OperationContract]
         void UpdateStock(string book_title, int quantity);
@@ -67,6 +65,7 @@ namespace Store
         [OperationContract]
         void ReceiveOrder(string[] order);
     }
+
     [CollectionDataContract(Name = "books", Namespace = "")]
     public class Books : List<Book>
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
+﻿using System.ServiceModel;
 
 namespace Warehouse
 {
@@ -14,6 +9,5 @@ namespace Warehouse
         [OperationContract(IsOneWay = true)]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         void AddOrder(string title, int quantity);
-        
     }
 }

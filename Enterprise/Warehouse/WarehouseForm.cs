@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.ServiceModel;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.ServiceModel;
+using System.Windows.Forms;
 using Warehouse.StoreService;
 
 namespace Warehouse
 {
     public partial class WarehouseForm : Form, IStoreServiceCallback
     {
-        ServiceHost host = null;
-        StoreServiceClient storeproxy;
-        bool open;
         public static string connString = ConfigurationManager.ConnectionStrings["WarehouseDB"].ToString();
+        private readonly ServiceHost host;
+        private readonly StoreServiceClient storeproxy;
+        private bool open;
 
         public WarehouseForm(ServiceHost h)
         {
@@ -31,61 +25,63 @@ namespace Warehouse
         }
 
         public void PrintReceipt(string client_name, string book_title, string quantity, string price)
-        {}
+        {
+        }
 
-        public void UpdateOrder(string title, string quantity) { }
+        public void UpdateOrder(string title, string quantity)
+        {
+        }
 
         private void WarehouseForm_Load(object sender, EventArgs e)
         {
-            
         }
 
         private void ListViewHeader()
         {
-            this.listView1.Clear();
+            listView1.Clear();
 
-            System.Windows.Forms.ColumnHeader id = new System.Windows.Forms.ColumnHeader();
+            var id = new ColumnHeader();
             id.Text = "ID";
             id.Width = 50;
             id.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader book = new System.Windows.Forms.ColumnHeader();
+            var book = new ColumnHeader();
             book.Text = "book";
             book.Width = 200;
             book.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader qt = new System.Windows.Forms.ColumnHeader();
+            var qt = new ColumnHeader();
             qt.Text = "qt";
             qt.Width = 50;
             qt.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader st = new System.Windows.Forms.ColumnHeader();
+            var st = new ColumnHeader();
             st.Text = "state";
             st.Width = 150;
             st.TextAlign = HorizontalAlignment.Center;
 
-            this.listView1.Columns.Add(id);
-            this.listView1.Columns.Add(book);
-            this.listView1.Columns.Add(qt);
-            this.listView1.Columns.Add(st);
+            listView1.Columns.Add(id);
+            listView1.Columns.Add(book);
+            listView1.Columns.Add(qt);
+            listView1.Columns.Add(st);
         }
 
         private void SendButton_Click(object sender, EventArgs e)
         {
-            var selectedItems = this.listView1.SelectedItems;
+            var selectedItems = listView1.SelectedItems;
 
-            List<String> orderID = new List<string>();
+            var orderID = new List<string>();
 
-            SqlConnection conn = new SqlConnection(connString);
+            var conn = new SqlConnection(connString);
 
             try
             {
                 conn.Open();
                 foreach (ListViewItem i in selectedItems)
                 {
-                    string sqlcmd = "Update Orders set state='completed' where Id="+i.Text;
-                    SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                    var sqlcmd = "Update Orders set state='completed' where Id=" + i.Text;
+                    var cmd = new SqlCommand(sqlcmd, conn);
 
                     cmd.ExecuteNonQuery();
-                    string[] order = GetOrderInfo(System.Convert.ToInt32(i.Text));
-                    
+                    var order = GetOrderInfo(Convert.ToInt32(i.Text));
+
                     storeproxy.ReceiveOrder(order);
                 }
             }
@@ -93,26 +89,25 @@ namespace Warehouse
             {
                 conn.Close();
             }
-
         }
 
         private string[] GetOrderInfo(int id)
         {
-            SqlConnection conn = new SqlConnection(connString);
-            string[] order = new string[2];
+            var conn = new SqlConnection(connString);
+            var order = new string[2];
             try
             {
                 conn.Open();
-                    string sqlcmd = "Select book_title, quantity from Orders where Id=" + id;
-                    SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                var sqlcmd = "Select book_title, quantity from Orders where Id=" + id;
+                var cmd = new SqlCommand(sqlcmd, conn);
 
 
-                SqlDataReader reader = cmd.ExecuteReader();
+                var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    string book_title = (reader["book_title"].ToString());
-                    string quantity = (reader["quantity"].ToString());
+                    var book_title = reader["book_title"].ToString();
+                    var quantity = reader["quantity"].ToString();
 
                     order[0] = book_title;
                     order[1] = quantity;
@@ -132,37 +127,36 @@ namespace Warehouse
             {
                 host.Close();
                 open = false;
-                this.OpenButton.Text = "Start";
+                OpenButton.Text = "Start";
             }
             else
             {
                 host.Open();
                 open = true;
-                this.OpenButton.Text = "End";
+                OpenButton.Text = "End";
             }
-            
         }
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
-            SqlConnection conn = new SqlConnection(connString);
+            var conn = new SqlConnection(connString);
             try
             {
                 conn.Open();
-                string sqlcmd = "Select Id, book_title, quantity, state from Orders";
-                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                var sqlcmd = "Select Id, book_title, quantity, state from Orders";
+                var cmd = new SqlCommand(sqlcmd, conn);
 
-                SqlDataReader reader = cmd.ExecuteReader();
+                var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    string id = (reader["Id"].ToString());
-                    string book_title = (reader["book_title"].ToString());
-                    string quantity = (reader["quantity"].ToString());
-                    string state = (reader["state"].ToString());
+                    var id = reader["Id"].ToString();
+                    var book_title = reader["book_title"].ToString();
+                    var quantity = reader["quantity"].ToString();
+                    var state = reader["state"].ToString();
 
-                    string[] row = { id, book_title, quantity, state };
+                    string[] row = {id, book_title, quantity, state};
                     var listViewItem = new ListViewItem(row);
                     listView1.Items.Add(listViewItem);
                 }
@@ -170,13 +164,11 @@ namespace Warehouse
             }
             catch
             {
-                
             }
             finally
             {
                 conn.Close();
             }
-
         }
     }
 }

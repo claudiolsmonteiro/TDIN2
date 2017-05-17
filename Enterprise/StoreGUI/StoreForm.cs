@@ -1,34 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.ServiceModel;
-using StoreGUI.StoreService;
-using StoreGUI.WarehouseService;
 using System.Threading;
+using System.Windows.Forms;
+using StoreGUI.StoreService;
 
 namespace StoreGUI
 {
     public partial class StoreForm : Form, IStoreServiceCallback
     {
-        StoreServiceClient storeProxy;
-        private List<KeyValuePair<string, string>> incoming;
-        string active;
+        private readonly List<KeyValuePair<string, string>> incoming;
+        private readonly StoreServiceClient storeProxy;
+        private string active;
+
         public StoreForm()
         {
             InitializeComponent();
             storeProxy = new StoreServiceClient(new InstanceContext(this));
-            
+
             BooksView();
             active = "books";
             incoming = new List<KeyValuePair<string, string>>();
             //storeProxy.Open();
+        }
+
+        public void PrintReceipt(string client_name, string book_title, string quantity, string price)
+        {
+        }
+
+        public void UpdateOrder(string title, string quantity)
+        {
+            incoming.Insert(0, new KeyValuePair<string, string>(title, quantity));
+            MessageBox.Show(quantity + " copies of " + title + " are going to be shipped. Dispatch should occur at " +
+                            DateTime.Today.AddDays(2).ToString("d"));
         }
 
         private void StoreForm_Load(object sender, EventArgs e)
@@ -36,19 +40,11 @@ namespace StoreGUI
             storeProxy.Subscribe();
         }
 
-        public void PrintReceipt(string client_name, string book_title, string quantity, string price) { }
-
-        public void UpdateOrder(string title, string quantity)
-        {
-            incoming.Insert(0,new KeyValuePair<string, string>(title, quantity));
-            MessageBox.Show(quantity + " copies of " + title + " are going to be shipped. Dispatch should occur at "+ System.DateTime.Today.AddDays(2).ToString("d"));
-        }
-
         private void refreshList()
         {
             if (active.Equals("books"))
                 BooksView();
-            else if(active.Equals("pending"))
+            else if (active.Equals("pending"))
                 PendingView();
             else
                 OrdersView();
@@ -56,49 +52,49 @@ namespace StoreGUI
 
         private void BooksView()
         {
-            this.listView1.Clear();
-            System.Windows.Forms.ColumnHeader title = new System.Windows.Forms.ColumnHeader();
+            listView1.Clear();
+            var title = new ColumnHeader();
             title.Text = "title";
             title.Width = 400;
             title.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader price = new System.Windows.Forms.ColumnHeader();
+            var price = new ColumnHeader();
             price.Text = "price";
             price.Width = 125;
             price.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader stock = new System.Windows.Forms.ColumnHeader();
+            var stock = new ColumnHeader();
             stock.Text = "stock";
             stock.Width = 50;
             stock.TextAlign = HorizontalAlignment.Center;
-            this.listView1.Columns.Add(title);
-            this.listView1.Columns.Add(price);
-            this.listView1.Columns.Add(stock);
+            listView1.Columns.Add(title);
+            listView1.Columns.Add(price);
+            listView1.Columns.Add(stock);
 
-            foreach(book b in storeProxy.GetAllBooks())
+            foreach (var b in storeProxy.GetAllBooks())
             {
-                string[] row = { b.title, b.price+" €", b.quantity };
+                string[] row = {b.title, b.price + " €", b.quantity};
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
         }
-        
+
         private void BookView(string book_title)
         {
-            this.listView1.Clear();
-            System.Windows.Forms.ColumnHeader title = new System.Windows.Forms.ColumnHeader();
+            listView1.Clear();
+            var title = new ColumnHeader();
             title.Text = "title";
             title.Width = 400;
             title.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader price = new System.Windows.Forms.ColumnHeader();
+            var price = new ColumnHeader();
             price.Text = "price";
             price.Width = 125;
             price.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader stock = new System.Windows.Forms.ColumnHeader();
+            var stock = new ColumnHeader();
             stock.Text = "stock";
             stock.Width = 50;
             stock.TextAlign = HorizontalAlignment.Center;
-            this.listView1.Columns.Add(title);
-            this.listView1.Columns.Add(price);
-            this.listView1.Columns.Add(stock);
+            listView1.Columns.Add(title);
+            listView1.Columns.Add(price);
+            listView1.Columns.Add(stock);
 
             string[] book =
             {
@@ -111,79 +107,76 @@ namespace StoreGUI
 
         private void OrdersView()
         {
-            this.listView1.Clear();
-            System.Windows.Forms.ColumnHeader id = new System.Windows.Forms.ColumnHeader();
+            listView1.Clear();
+            var id = new ColumnHeader();
             id.Text = "id";
             id.Width = 120;
             id.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader client = new System.Windows.Forms.ColumnHeader();
+            var client = new ColumnHeader();
             client.Text = "client name";
             client.Width = 150;
             client.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader book = new System.Windows.Forms.ColumnHeader();
+            var book = new ColumnHeader();
             book.Text = "book";
             book.Width = 150;
             book.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader qt = new System.Windows.Forms.ColumnHeader();
+            var qt = new ColumnHeader();
             qt.Text = "qt";
             qt.Width = 40;
             qt.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader status = new System.Windows.Forms.ColumnHeader();
+            var status = new ColumnHeader();
             status.Text = "status";
             status.Width = 125;
             status.TextAlign = HorizontalAlignment.Center;
-            this.listView1.Columns.Add(id);
-            this.listView1.Columns.Add(client);
-            this.listView1.Columns.Add(book);
-            this.listView1.Columns.Add(qt);
-            this.listView1.Columns.Add(status);
+            listView1.Columns.Add(id);
+            listView1.Columns.Add(client);
+            listView1.Columns.Add(book);
+            listView1.Columns.Add(qt);
+            listView1.Columns.Add(status);
 
-            foreach (order o in storeProxy.GetAllOrders())
+            foreach (var o in storeProxy.GetAllOrders())
             {
-                string[] row = { o.guid, o.client_name, o.book_title, o.quantity, o.state };
+                string[] row = {o.guid, o.client_name, o.book_title, o.quantity, o.state};
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
-
-
         }
 
         private void OrderView(string client_name)
         {
-            this.listView1.Clear();
-            System.Windows.Forms.ColumnHeader id = new System.Windows.Forms.ColumnHeader();
+            listView1.Clear();
+            var id = new ColumnHeader();
             id.Text = "id";
             id.Width = 120;
             id.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader client = new System.Windows.Forms.ColumnHeader();
+            var client = new ColumnHeader();
             client.Text = "client name";
             client.Width = 150;
             client.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader book = new System.Windows.Forms.ColumnHeader();
+            var book = new ColumnHeader();
             book.Text = "book";
             book.Width = 150;
             book.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader qt = new System.Windows.Forms.ColumnHeader();
+            var qt = new ColumnHeader();
             qt.Text = "qt";
             qt.Width = 40;
             qt.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader status = new System.Windows.Forms.ColumnHeader();
+            var status = new ColumnHeader();
             status.Text = "status";
             status.Width = 125;
             status.TextAlign = HorizontalAlignment.Center;
-            this.listView1.Columns.Add(id);
-            this.listView1.Columns.Add(client);
-            this.listView1.Columns.Add(book);
-            this.listView1.Columns.Add(qt);
-            this.listView1.Columns.Add(status);
-            
-            foreach (order o in storeProxy.GetOrders(client_name))
+            listView1.Columns.Add(id);
+            listView1.Columns.Add(client);
+            listView1.Columns.Add(book);
+            listView1.Columns.Add(qt);
+            listView1.Columns.Add(status);
+
+            foreach (var o in storeProxy.GetOrders(client_name))
             {
-                string[] row = { o.guid, o.client_name, o.book_title, o.quantity, o.state };
+                string[] row = {o.guid, o.client_name, o.book_title, o.quantity, o.state};
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
-
         }
 
         private void BooksButton_Click(object sender, EventArgs e)
@@ -203,14 +196,13 @@ namespace StoreGUI
             new Thread(() => new SellForm(storeProxy).ShowDialog()).Start();
             refreshList();
         }
-        
+
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if (active.Equals("books"))
                 BookView(SearchBox.Text);
             else
                 OrderView(SearchBox.Text);
-            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -223,51 +215,51 @@ namespace StoreGUI
 
         private void PendingView()
         {
-            this.listView1.Clear();
-            System.Windows.Forms.ColumnHeader title = new System.Windows.Forms.ColumnHeader();
+            listView1.Clear();
+            var title = new ColumnHeader();
             title.Text = "Title";
             title.Width = 400;
             title.TextAlign = HorizontalAlignment.Center;
-            System.Windows.Forms.ColumnHeader quantity = new System.Windows.Forms.ColumnHeader();
+            var quantity = new ColumnHeader();
             quantity.Text = "Quantity";
             quantity.Width = 125;
             quantity.TextAlign = HorizontalAlignment.Center;
-            this.listView1.Columns.Add(title);
-            this.listView1.Columns.Add(quantity);
-            this.listView1.FullRowSelect = true;
-            foreach (KeyValuePair<string, string> i in incoming)
+            listView1.Columns.Add(title);
+            listView1.Columns.Add(quantity);
+            listView1.FullRowSelect = true;
+            foreach (var i in incoming)
             {
-                string[] row = { i.Key, i.Value };
+                string[] row = {i.Key, i.Value};
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
             }
         }
+
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (active.Equals("books"))
             {
-                
             }
             else if (active.Equals("pending"))
             {
-                DialogResult result = MessageBox.Show("Accept Order", "Book", MessageBoxButtons.YesNo);
+                var result = MessageBox.Show("Accept Order", "Book", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
-                    string title="";
-                    int x = 0;
-                    int quantity= 0;
+                    var title = "";
+                    var x = 0;
+                    var quantity = 0;
                     foreach (ListViewItem Item in listView1.SelectedItems)
                     {
                         x = Item.Index;
                         title = listView1.Items[x].SubItems[0].Text;
-                        quantity = System.Convert.ToInt32(listView1.Items[x].SubItems[1].Text);
+                        quantity = Convert.ToInt32(listView1.Items[x].SubItems[1].Text);
                     }
-                    storeProxy.UpdateStock(title,quantity);
-                    incoming.Remove(new KeyValuePair<string, string>(listView1.Items[x].SubItems[0].Text, listView1.Items[x].SubItems[1].Text));
+                    storeProxy.UpdateStock(title, quantity);
+                    incoming.Remove(new KeyValuePair<string, string>(listView1.Items[x].SubItems[0].Text,
+                        listView1.Items[x].SubItems[1].Text));
                 }
                 else if (result == DialogResult.No)
                 {
-                    
                 }
             }
             refreshList();

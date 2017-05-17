@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using StoreGUI.StoreService;
 using StoreGUI.WarehouseService;
@@ -14,9 +7,9 @@ namespace StoreGUI
 {
     public partial class SellForm : Form
     {
-        StoreService.
-        StoreServiceClient storeProxy;
-        WarehouseServiceClient warehouseProxy;
+        private readonly StoreServiceClient storeProxy;
+
+        private readonly WarehouseServiceClient warehouseProxy;
 
         public SellForm(StoreServiceClient sp)
         {
@@ -27,12 +20,12 @@ namespace StoreGUI
 
         private void SellForm_Load(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int ret = storeProxy.MakeaSell(this.client_name.Text, this.client_email.Text, this.client_address.Text, this.book_title.Text, System.Convert.ToInt32(this.quantityValue.Value));
+            var ret = storeProxy.MakeaSell(client_name.Text, client_email.Text, client_address.Text, book_title.Text,
+                Convert.ToInt32(quantityValue.Value));
 
             switch (ret)
             {
@@ -41,12 +34,12 @@ namespace StoreGUI
                     break;
                 case 2:
                     MessageBox.Show("Insufficient stock for sale. An order was created");
-                    warehouseProxy.AddOrder(this.book_title.Text, (System.Convert.ToInt32(this.quantityValue.Value)+10));
+                    warehouseProxy.AddOrder(book_title.Text, Convert.ToInt32(quantityValue.Value) + 10);
                     break;
                 default:
                     break;
             }
-            this.Close();
+            Close();
         }
     }
 }
