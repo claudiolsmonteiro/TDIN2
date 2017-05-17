@@ -32,6 +32,12 @@ namespace Store
         Orders GetOrders(string client);
 
         [OperationContract]
+        void SatisfyOrders(string book, int quantity);
+
+        [OperationContract]
+        void SatisfyOrder(int orderID, string client, string email, string book, int quant, string guid);
+
+        [OperationContract]
         int GetStock(string book_title);
 
         [OperationContract]

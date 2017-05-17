@@ -227,6 +227,68 @@ namespace Store
             return retList;
         }
 
+        public void SatisfyOrders(string book, int quantity)
+        {
+            SqlConnection conn = new SqlConnection(connString);
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Select top (1) order_id, guid, client_name, client_email, book_title, quantity from Orders where book_title ='" + book + "' and quantity="+ (quantity-10) + " and state ='waiting expedition' order by order_id asc";
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                string id = "", uid = "", clName="", clEmail="", bTitle="", qt="";
+                while (reader.Read())
+                {
+                    id = reader["order_id"].ToString();
+                    uid = reader["guid"].ToString();
+                    clName = (reader["client_name"].ToString());
+                    clEmail = (reader["client_email"].ToString());
+                    bTitle = (reader["book_title"].ToString());
+                    qt = (reader["quantity"].ToString());
+                }
+                reader.Close();
+
+                SatisfyOrder(System.Convert.ToInt32(id), clName, clEmail, bTitle, System.Convert.ToInt32(qt), uid);
+
+                //SatisfyPossibleOrders(book_title);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void SatisfyOrder(int orderID, string client, string email, string book, int quant, string guid)
+        {
+            SqlConnection conn = new SqlConnection(connString);
+            try
+            {
+                conn.Open();
+                string sqlcmd = "Update Orders set state= 'dispatched at " + DateTime.Today.ToString("d") + "' where order_id=" + orderID;
+                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+                cmd.ExecuteNonQuery();
+
+                string subject = "Order with ID:" + guid + " placed";
+                string msg = "Hello " + client + ", your order " + guid + " for " + quant + " " + book + " has been dispatched.";
+                SendEmail(email, subject, msg);
+
+                string sqlcmd2 = "Update Books set quantity=quantity-" + quant + " where title='" + book + "'";
+                SqlCommand cmd2 = new SqlCommand(sqlcmd, conn);
+                cmd2.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
         public int GetStock(string book_title)
         {
             SqlConnection conn = new SqlConnection(connString);
@@ -261,15 +323,17 @@ namespace Store
                 cmd.Parameters.Add("@bookTit", SqlDbType.VarChar,50).Value= book_title;
                 cmd.Parameters.Add("@qt", SqlDbType.Int).Value = quantity;
                 cmd.Parameters.Add("@clName", SqlDbType.VarChar, 50).Value = client_name;
-                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = client_name;
-                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = client_addr;
+                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = client_addr;
+                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = client_email;
                 cmd.Parameters.Add("@st", SqlDbType.VarChar, 50).Value = "waiting expedition";
 
                 cmd.ExecuteNonQuery();
-                
+
                 //TODO
                 //Send remote call to warehouse
-                SendEmail(client_name, client_email, client_addr, book_title, quantity);
+                string subject = "New order";
+                string msg = "Hello " + client_name + ", your order for " + quantity + " " + book_title + " has been registered. We will dispatch it as soon as possible.";
+                SendEmail(client_email, subject, msg);
             }
             catch
             {
@@ -291,6 +355,7 @@ namespace Store
                 string sqlcmd = "Update Books set quantity=quantity+" + quantity + " where title='" + book_title + "'";
                 SqlCommand cmd = new SqlCommand(sqlcmd, conn);
                 rows = cmd.ExecuteNonQuery();
+                SatisfyOrders(book_title, quantity);
             }
             catch
             {
@@ -302,9 +367,8 @@ namespace Store
             }
         }
 
-        public void SendEmail(string client_name , string client_email , string client_addr , string book_title , int quantity ) 
+        public void SendEmail(string client_email , string subject , string message ) 
         {
-            //string orderprice = GetPrice(book_title, quantity);
             SmtpClient client = new SmtpClient();
             client.Port = 25;
             client.Host = "smtp.gmail.com";
@@ -313,35 +377,11 @@ namespace Store
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential("tdinproj2@gmail.com", "tdinproj2");
-            string id = getGuid(client_name, book_title);
-            MailMessage mm = new MailMessage("tdinproj2@gmail.com", client_email, "Order with ID:" + id +" placed", "Hi "+client_name+".\n The order you placed for "+ quantity+ " "+ book_title+" is being worked on.");
+            MailMessage mm = new MailMessage("tdinproj2@gmail.com", client_email, subject, message);
             mm.BodyEncoding = UTF8Encoding.UTF8;
             mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
 
             client.Send(mm);
-        }
-
-        string getGuid(string client_name, string book_title)
-        {
-            SqlConnection conn = new SqlConnection(connString);
-
-            string id = "";
-            try
-            {
-                conn.Open();
-                string sqlcmd = "Select guid from Orders where title = '" + book_title + "' and client_name= '"+ client_name+"'";
-                SqlCommand cmd = new SqlCommand(sqlcmd, conn);
-                id = cmd.ExecuteScalar().ToString();
-            }
-            catch
-            {
-                return null;
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return id;
         }
 
         public int ConfirmSell(string client_name, string book_title, int quantity)

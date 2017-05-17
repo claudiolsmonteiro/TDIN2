@@ -253,6 +253,18 @@ namespace StorePrinter.StoreService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetOrders", ReplyAction="http://tempuri.org/IStoreService/GetOrdersResponse")]
         System.Threading.Tasks.Task<StorePrinter.StoreService.orders> GetOrdersAsync(string client);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/SatisfyOrders", ReplyAction="http://tempuri.org/IStoreService/SatisfyOrdersResponse")]
+        void SatisfyOrders(string book, int quantity);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/SatisfyOrders", ReplyAction="http://tempuri.org/IStoreService/SatisfyOrdersResponse")]
+        System.Threading.Tasks.Task SatisfyOrdersAsync(string book, int quantity);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/SatisfyOrder", ReplyAction="http://tempuri.org/IStoreService/SatisfyOrderResponse")]
+        void SatisfyOrder(int orderID, string client, string email, string book, int quant, string guid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/SatisfyOrder", ReplyAction="http://tempuri.org/IStoreService/SatisfyOrderResponse")]
+        System.Threading.Tasks.Task SatisfyOrderAsync(int orderID, string client, string email, string book, int quant, string guid);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStoreService/GetStock", ReplyAction="http://tempuri.org/IStoreService/GetStockResponse")]
         int GetStock(string book_title);
         
@@ -398,6 +410,22 @@ namespace StorePrinter.StoreService {
         
         public System.Threading.Tasks.Task<StorePrinter.StoreService.orders> GetOrdersAsync(string client) {
             return base.Channel.GetOrdersAsync(client);
+        }
+        
+        public void SatisfyOrders(string book, int quantity) {
+            base.Channel.SatisfyOrders(book, quantity);
+        }
+        
+        public System.Threading.Tasks.Task SatisfyOrdersAsync(string book, int quantity) {
+            return base.Channel.SatisfyOrdersAsync(book, quantity);
+        }
+        
+        public void SatisfyOrder(int orderID, string client, string email, string book, int quant, string guid) {
+            base.Channel.SatisfyOrder(orderID, client, email, book, quant, guid);
+        }
+        
+        public System.Threading.Tasks.Task SatisfyOrderAsync(int orderID, string client, string email, string book, int quant, string guid) {
+            return base.Channel.SatisfyOrderAsync(orderID, client, email, book, quant, guid);
         }
         
         public int GetStock(string book_title) {
