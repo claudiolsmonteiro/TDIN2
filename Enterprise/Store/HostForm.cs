@@ -7,6 +7,7 @@ namespace Store
     public partial class HostForm : Form
     {
         private ServiceHost SService;
+        private ServiceHost WebService;
 
         public HostForm()
         {
@@ -23,8 +24,12 @@ namespace Store
         private void HostForm_Load(object sender, EventArgs e)
         {
             SService = new ServiceHost(typeof(StoreService));
+            WebService = new ServiceHost(typeof(StoreWebService));
             label1.Text = "Store Service Open";
+            WebService.Open();
             SService.Open();
+            
+            
         }
     }
 }

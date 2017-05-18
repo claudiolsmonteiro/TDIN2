@@ -11,6 +11,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorePrinter", "StorePrinte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse", "Warehouse\Warehouse.csproj", "{BD1B4A4F-DDF5-4B1E-9B31-F0FF83FD780F}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Website(1)", "Website\", "{060D5B8B-57A4-45A9-896E-EC867D07FFF0}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_1732"
+		Debug.AspNetCompiler.PhysicalPath = "Website\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_1732\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_1732"
+		Release.AspNetCompiler.PhysicalPath = "Website\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_1732\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "1732"
+		SlnRelativePath = "Website\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +55,10 @@ Global
 		{BD1B4A4F-DDF5-4B1E-9B31-F0FF83FD780F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD1B4A4F-DDF5-4B1E-9B31-F0FF83FD780F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD1B4A4F-DDF5-4B1E-9B31-F0FF83FD780F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{060D5B8B-57A4-45A9-896E-EC867D07FFF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{060D5B8B-57A4-45A9-896E-EC867D07FFF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{060D5B8B-57A4-45A9-896E-EC867D07FFF0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{060D5B8B-57A4-45A9-896E-EC867D07FFF0}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

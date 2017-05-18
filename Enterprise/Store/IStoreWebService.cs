@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.Text;
 
@@ -13,20 +14,40 @@ namespace Store
     [ServiceContract]
     public interface IStoreWebService
     {
-        [WebGet(UriTemplate = "/books", ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "/books", ResponseFormat = WebMessageFormat.Json)]
         [Description("Returns all books available.")]
         [OperationContract]
         Books GetBooks();
 
-        [WebInvoke(Method = "POST", UriTemplate = "/orders", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "/orders/new",BodyStyle  = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [Description("Adds an order.")]
         [OperationContract]
-        int AddOrder(string name, string address, string email, string book, int quantity);
+        string AddOrder(/*OnlineOrder onlinelorder*/string Name, string Address, string Email, string Book, int Quantity);
 
-        [WebInvoke(Method = "GET", UriTemplate = "/orders/{id}", ResponseFormat = WebMessageFormat.Json)]
-        [Description("Gets an order by order id.")]
+        [WebInvoke(Method = "GET", UriTemplate = "/orders/{name}", ResponseFormat = WebMessageFormat.Json)]
+        [Description("Gets orders from a user.")]
         [OperationContract]
-        Book GetOrder(string id);
+        Orders GetOrder(string name);
 
     }
+    /*
+    [DataContract]
+    public class OnlineOrder
+    {
+        [DataMember]
+        public string Name { get; set; }
+
+        [DataMember]
+        public string Address { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public string Book { get; set; }
+
+        [DataMember]
+        public int Quantity { get; set; }
+
+    }*/
 }

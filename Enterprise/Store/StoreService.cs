@@ -343,6 +343,44 @@ namespace Store
             }
         }
 
+        public void StoreOnlineOrder(string name, string email, string address, string book, int quantity)
+        {
+            var conn = new SqlConnection(connString);
+            try
+            {
+                conn.Open();
+                var sqlcmd =
+                    "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state) VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st)";
+                var cmd = new SqlCommand(sqlcmd, conn);
+                cmd.Parameters.Add("@bookTit", SqlDbType.VarChar, 50).Value = book;
+                cmd.Parameters.Add("@qt", SqlDbType.Int).Value = quantity;
+                cmd.Parameters.Add("@clName", SqlDbType.VarChar, 50).Value = name;
+                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = address;
+                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = email;
+                cmd.Parameters.Add("@st", SqlDbType.VarChar, 50).Value = "dispatch will occur at "+ DateTime.Today.AddDays(1).ToString("d");
+
+                cmd.ExecuteNonQuery();
+                Book b;
+                b = GetBook(book);
+
+                //Send remote call to warehouse
+                var subject = "New order";
+                var msg = "Hello " + name + ".\n " +
+                          "Your order for " + (System.Convert.ToInt32(quantity)) + " " + book +
+                          " has been placed. We will dispatch it tomorrow "+ DateTime.Today.AddDays(1).ToString("d")+".\n\n" +
+                          "Single Price = " + b.price + "\n" +
+                          "Total Price = " + ((quantity) * (float.Parse(Regex.Replace(b.price, "[^0-9,]", "")))) + " €";
+                SendEmail(email, subject, msg);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
         public void UpdateStock(string book_title, int quantity)
         {
             var conn = new SqlConnection(connString);
@@ -394,6 +432,30 @@ namespace Store
             return 1;
         }
 
+        public void ConfirmOnlineSell(string name, string book, int quantity)
+        {
+            var conn = new SqlConnection(connString);
+            int rows;
+            try
+            {
+                conn.Open();
+                var sqlcmd = "Update Books set quantity=quantity-" + quantity + " where title='" + book + "'";
+                var cmd = new SqlCommand(sqlcmd, conn);
+                rows = cmd.ExecuteNonQuery();
+
+                if (rows == 1)
+                {
+                    
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
         public int MakeaSell(string client_name, string client_email, string client_addr, string book_title,
             int quantity)
         {
