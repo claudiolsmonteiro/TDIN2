@@ -28,8 +28,6 @@ namespace Store
             label1.Text = "Store Service Open";
             WebService.Open();
             SService.Open();
-            
-            
         }
     }
 }

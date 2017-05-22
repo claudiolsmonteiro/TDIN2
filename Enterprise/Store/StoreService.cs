@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.ServiceModel;
@@ -211,11 +210,11 @@ namespace Store
             try
             {
                 conn.Open();
-                var sqlcmd= "";
-                if(first == true)
+                var sqlcmd = "";
+                if (first)
                     sqlcmd =
-                    "Select TOP(1) order_id, guid, client_name, client_email, book_title, quantity from Orders where book_title ='" +
-                    book + "' and quantity=" + quantity + " and state LIKE '%occur%' order by order_id asc";
+                        "Select TOP(1) order_id, guid, client_name, client_email, book_title, quantity from Orders where book_title ='" +
+                        book + "' and quantity=" + quantity + " and state LIKE '%occur%' order by order_id asc";
                 else
                     sqlcmd =
                         "Select TOP(1) order_id, guid, client_name, client_email, book_title, quantity from Orders where book_title ='" +
@@ -235,7 +234,7 @@ namespace Store
                     qt = reader["quantity"].ToString();
                 }
                 reader.Close();
-                if(!id.Equals(""))
+                if (!id.Equals(""))
                     SatisfyOrder(Convert.ToInt32(id), cl_Name, cl_Email, b_Title, Convert.ToInt32(qt), uid);
 
                 //SatisfyPossibleOrders(book_title);
@@ -270,7 +269,7 @@ namespace Store
                 var cmd2 = new SqlCommand(sqlcmd2, conn);
                 cmd2.ExecuteNonQuery();
 
-                SatisfyOrders(book,System.Convert.ToInt32(GetBook(book).quantity), false);
+                SatisfyOrders(book, Convert.ToInt32(GetBook(book).quantity), false);
             }
             catch
             {
@@ -328,49 +327,12 @@ namespace Store
                 //Send remote call to warehouse
                 var subject = "New order";
                 var msg = "Hello " + client_name + ".\n " +
-                          "Your order for " + (quantity - 10) +" " + book_title+  
-                          " has been placed. We will dispatch it as soon as possible.\n\n"+
-                          "Single Price = " +book.price+"\n"+
-                          "Total Price = " +((quantity-10)*(float.Parse(Regex.Replace(book.price, "[^0-9,]", ""))))+" €";
+                          "Your order for " + (quantity - 10) + " " + book_title +
+                          " has been placed. We will dispatch it as soon as possible.\n\n" +
+                          "Single Price = " + book.price + "\n" +
+                          "Total Price = " + (quantity - 10) * float.Parse(Regex.Replace(book.price, "[^0-9,]", "")) +
+                          " €";
                 SendEmail(client_email, subject, msg);
-            }
-            catch
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
-
-        public void StoreOnlineOrder(string name, string email, string address, string book, int quantity)
-        {
-            var conn = new SqlConnection(connString);
-            try
-            {
-                conn.Open();
-                var sqlcmd =
-                    "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state) VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st)";
-                var cmd = new SqlCommand(sqlcmd, conn);
-                cmd.Parameters.Add("@bookTit", SqlDbType.VarChar, 50).Value = book;
-                cmd.Parameters.Add("@qt", SqlDbType.Int).Value = quantity;
-                cmd.Parameters.Add("@clName", SqlDbType.VarChar, 50).Value = name;
-                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = address;
-                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = email;
-                cmd.Parameters.Add("@st", SqlDbType.VarChar, 50).Value = "dispatch will occur at "+ DateTime.Today.AddDays(1).ToString("d");
-
-                cmd.ExecuteNonQuery();
-                Book b;
-                b = GetBook(book);
-
-                //Send remote call to warehouse
-                var subject = "New order";
-                var msg = "Hello " + name + ".\n " +
-                          "Your order for " + (System.Convert.ToInt32(quantity)) + " " + book +
-                          " has been placed. We will dispatch it tomorrow "+ DateTime.Today.AddDays(1).ToString("d")+".\n\n" +
-                          "Single Price = " + b.price + "\n" +
-                          "Total Price = " + ((quantity) * (float.Parse(Regex.Replace(b.price, "[^0-9,]", "")))) + " €";
-                SendEmail(email, subject, msg);
             }
             catch
             {
@@ -391,7 +353,7 @@ namespace Store
                 var sqlcmd = "Update Books set quantity=quantity+" + quantity + " where title='" + book_title + "'";
                 var cmd = new SqlCommand(sqlcmd, conn);
                 rows = cmd.ExecuteNonQuery();
-                SatisfyOrders(book_title, quantity - 10,true);
+                SatisfyOrders(book_title, quantity - 10, true);
             }
             catch
             {
@@ -432,30 +394,6 @@ namespace Store
             return 1;
         }
 
-        public void ConfirmOnlineSell(string name, string book, int quantity)
-        {
-            var conn = new SqlConnection(connString);
-            int rows;
-            try
-            {
-                conn.Open();
-                var sqlcmd = "Update Books set quantity=quantity-" + quantity + " where title='" + book + "'";
-                var cmd = new SqlCommand(sqlcmd, conn);
-                rows = cmd.ExecuteNonQuery();
-
-                if (rows == 1)
-                {
-                    
-                }
-            }
-            catch
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
         public int MakeaSell(string client_name, string client_email, string client_addr, string book_title,
             int quantity)
         {
@@ -488,6 +426,70 @@ namespace Store
                              quantity + " and book_title = '" + title + "'";
                 var cmd = new SqlCommand(sqlcmd, conn);
                 cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void StoreOnlineOrder(string name, string email, string address, string book, int quantity)
+        {
+            var conn = new SqlConnection(connString);
+            try
+            {
+                conn.Open();
+                var sqlcmd =
+                    "Insert into Orders (book_title, quantity, client_name, client_address, client_email, state) VALUES (@bookTit, @qt, @clName, @clAddr, @clEmail, @st)";
+                var cmd = new SqlCommand(sqlcmd, conn);
+                cmd.Parameters.Add("@bookTit", SqlDbType.VarChar, 50).Value = book;
+                cmd.Parameters.Add("@qt", SqlDbType.Int).Value = quantity;
+                cmd.Parameters.Add("@clName", SqlDbType.VarChar, 50).Value = name;
+                cmd.Parameters.Add("@clAddr", SqlDbType.VarChar, 50).Value = address;
+                cmd.Parameters.Add("@clEmail", SqlDbType.VarChar, 50).Value = email;
+                cmd.Parameters.Add("@st", SqlDbType.VarChar, 50).Value = "dispatch will occur at " +
+                                                                         DateTime.Today.AddDays(1).ToString("d");
+
+                cmd.ExecuteNonQuery();
+                Book b;
+                b = GetBook(book);
+
+                //Send remote call to warehouse
+                var subject = "New order";
+                var msg = "Hello " + name + ".\n " +
+                          "Your order for " + Convert.ToInt32(quantity) + " " + book +
+                          " has been placed. We will dispatch it tomorrow " + DateTime.Today.AddDays(1).ToString("d") +
+                          ".\n\n" +
+                          "Single Price = " + b.price + "\n" +
+                          "Total Price = " + quantity * float.Parse(Regex.Replace(b.price, "[^0-9,]", "")) + " €";
+                SendEmail(email, subject, msg);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void ConfirmOnlineSell(string name, string book, int quantity)
+        {
+            var conn = new SqlConnection(connString);
+            int rows;
+            try
+            {
+                conn.Open();
+                var sqlcmd = "Update Books set quantity=quantity-" + quantity + " where title='" + book + "'";
+                var cmd = new SqlCommand(sqlcmd, conn);
+                rows = cmd.ExecuteNonQuery();
+
+                if (rows == 1)
+                {
+                }
             }
             catch
             {

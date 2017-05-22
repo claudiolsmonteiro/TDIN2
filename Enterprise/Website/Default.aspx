@@ -7,30 +7,30 @@
     <title>TDIN Book Store</title>
 </head>
 <body>
-    <br/>
-    <br/>
+<br/>
+<br/>
 
-    <h1>TDIN Book Store</h1>
-    <br/>
-    <br/>
-    <table id="BookContent" border="1" runat="server"></table>
-    <br/>
-    <form id="form1" runat="server">
+<h1>TDIN Book Store</h1>
+<br/>
+<br/>
+<table id="BookContent" border="1" runat="server"></table>
+<br/>
+<form id="form1" runat="server">
     <div>
-        <label>Nome:<asp:TextBox ID="clNome" runat="server" /></label><br />
-        <label>Morada:<asp:TextBox ID="clMorada" runat="server" /></label><br />
-        <label>Email:<asp:TextBox ID="clEmail" runat="server" /></label><br />
-        <label>Livro: <asp:TextBox ID="bTitulo" runat="server"/></label><br />
-        <label>Quantidade:<asp:TextBox ID="bQuantidade" runat="server" /></label><br />
-        <asp:Button ID="submit" runat="server" OnClick="submit_OnClick" Text="Encomendar" />
-         <br/>
+        <label>Nome:<asp:TextBox ID="clNome" runat="server"/></label><br/>
+        <label>Morada:<asp:TextBox ID="clMorada" runat="server"/></label><br/>
+        <label>Email:<asp:TextBox ID="clEmail" runat="server"/></label><br/>
+        <label>Livro: <asp:TextBox ID="bTitulo" runat="server"/></label><br/>
+        <label>Quantidade:<asp:TextBox ID="bQuantidade" runat="server"/></label><br/>
+        <asp:Button ID="submit" runat="server" OnClick="submit_OnClick" Text="Encomendar"/>
         <br/>
         <br/>
         <br/>
-        <label>Nome:<asp:TextBox ID="OrderName" runat="server" /></label>
-        <asp:Button ID="getorder" runat="server" OnClick="getorder_OnClick" Text="Consultar" />
+        <br/>
+        <label>Nome:<asp:TextBox ID="OrderName" runat="server"/></label>
+        <asp:Button ID="getorder" runat="server" OnClick="getorder_OnClick" Text="Consultar"/>
     </div>
-    </form>
- <table id="OrderContent" border="1" runat="server"></table>
+</form>
+<table id="OrderContent" border="1" runat="server"></table>
 </body>
 </html>
